@@ -49,8 +49,14 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-bg">
-        <div className="text-accent text-xs uppercase tracking-[0.3em] animate-pulse font-bold">MARKETLENS INITIALIZING...</div>
+      <div className="flex flex-col h-screen items-center justify-center bg-bg gap-6">
+        <img 
+          src="https://chatgpt.com/backend-api/estuary/content?id=file_00000000ae1871f5a8f925de14542cf8&ts=493413&p=fs&cid=1&sig=544363e48ba03522eb389bda4b571cef7a8914e5f4ed2e5fbff1756e14c09479&v=0" 
+          alt="MarketLens Logo" 
+          className="w-20 h-20 object-contain animate-pulse" 
+          referrerPolicy="no-referrer" 
+        />
+        <div className="text-accent text-xs uppercase tracking-[0.3em] font-bold">MARKETLENS INITIALIZING...</div>
       </div>
     );
   }
