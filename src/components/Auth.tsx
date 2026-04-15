@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../lib/firebase';
 import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { TrendingUp, ShieldCheck, ArrowLeft } from 'lucide-react';
+import { ShieldCheck, ArrowLeft } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import LanguageSelector from './LanguageSelector';
 
@@ -59,9 +59,12 @@ export default function Auth() {
 
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <div className="w-12 h-12 bg-accent rounded-2xl flex items-center justify-center text-bg shadow-[0_0_20px_rgba(0,255,136,0.3)]">
-              <TrendingUp className="w-8 h-8" />
-            </div>
+            <img 
+              src="https://chatgpt.com/backend-api/estuary/content?id=file_00000000ae1871f5a8f925de14542cf8&ts=493413&p=fs&cid=1&sig=544363e48ba03522eb389bda4b571cef7a8914e5f4ed2e5fbff1756e14c09479&v=0" 
+              alt="MarketLens Logo" 
+              className="w-16 h-16 object-contain drop-shadow-[0_0_10px_rgba(0,255,136,0.3)]" 
+              referrerPolicy="no-referrer" 
+            />
           </div>
           <h1 className="text-3xl font-black tracking-tighter uppercase">MARKET<span className="text-accent">LENS</span></h1>
           <p className="text-[10px] text-text-dim uppercase tracking-widest mt-2 font-bold">Institutional Grade Portfolio Analysis</p>

@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { 
-  TrendingUp, 
   Shield, 
   Zap, 
   BarChart3, 
@@ -58,9 +57,12 @@ export default function LandingPage() {
       {/* Navigation */}
       <nav className="relative z-50 flex items-center justify-between px-6 py-6 max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center text-bg shadow-[0_0_20px_rgba(0,255,136,0.3)]">
-            <TrendingUp className="w-6 h-6" />
-          </div>
+          <img 
+            src="https://chatgpt.com/backend-api/estuary/content?id=file_00000000ae1871f5a8f925de14542cf8&ts=493413&p=fs&cid=1&sig=544363e48ba03522eb389bda4b571cef7a8914e5f4ed2e5fbff1756e14c09479&v=0" 
+            alt="MarketLens Logo" 
+            className="w-10 h-10 object-contain" 
+            referrerPolicy="no-referrer" 
+          />
           <span className="text-xl font-black tracking-tighter uppercase">Market<span className="text-accent">Lens</span></span>
         </div>
         <div className="hidden md:flex items-center gap-8">
@@ -370,7 +372,12 @@ export default function LandingPage() {
       <footer className="relative z-10 py-12 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-2 opacity-50">
-            <TrendingUp className="w-5 h-5" />
+            <img 
+              src="https://chatgpt.com/backend-api/estuary/content?id=file_00000000ae1871f5a8f925de14542cf8&ts=493413&p=fs&cid=1&sig=544363e48ba03522eb389bda4b571cef7a8914e5f4ed2e5fbff1756e14c09479&v=0" 
+              alt="MarketLens Logo" 
+              className="w-5 h-5 object-contain grayscale" 
+              referrerPolicy="no-referrer" 
+            />
             <span className="text-sm font-black tracking-tighter uppercase">MarketLens</span>
           </div>
           <div className="text-[10px] text-text-dim uppercase font-bold tracking-widest">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { User } from 'firebase/auth';
 import { UserProfile } from '../types';
-import { LayoutDashboard, Wallet, Newspaper, LogOut, TrendingUp, Compass, Sun, Moon } from 'lucide-react';
+import { LayoutDashboard, Wallet, Newspaper, LogOut, Compass, Sun, Moon } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { cn } from '../lib/utils';
 import TickerTape from './TickerTape';
@@ -48,7 +48,12 @@ export default function Layout({ user, profile }: LayoutProps) {
       {/* Sidebar */}
       <aside className="w-60 border-r border-border-accent flex flex-col p-6 gap-8">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-6 h-6 text-accent" />
+          <img 
+            src="https://chatgpt.com/backend-api/estuary/content?id=file_00000000ae1871f5a8f925de14542cf8&ts=493413&p=fs&cid=1&sig=544363e48ba03522eb389bda4b571cef7a8914e5f4ed2e5fbff1756e14c09479&v=0" 
+            alt="MarketLens Logo" 
+            className="w-8 h-8 object-contain" 
+            referrerPolicy="no-referrer" 
+          />
           <span className="font-bold tracking-tighter text-lg uppercase">MARKET<span className="text-accent">LENS</span></span>
         </div>
 
