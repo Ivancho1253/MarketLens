@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { User } from 'firebase/auth';
 import { UserProfile } from '../types';
-import { LayoutDashboard, Wallet, Newspaper, LogOut, TrendingUp, Compass } from 'lucide-react';
+import { LayoutDashboard, Wallet, Newspaper, LogOut, TrendingUp, Compass, Sun, Moon } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { cn } from '../lib/utils';
 
@@ -13,6 +13,27 @@ interface LayoutProps {
 
 export default function Layout({ user, profile }: LayoutProps) {
   const location = useLocation();
+  const [isLight, setIsLight] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      setIsLight(true);
+      document.documentElement.classList.add('light');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = !isLight;
+    setIsLight(newTheme);
+    if (newTheme) {
+      document.documentElement.classList.add('light');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.classList.remove('light');
+      localStorage.setItem('theme', 'dark');
+    }
+  };
 
   const navItems = [
     { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -22,7 +43,7 @@ export default function Layout({ user, profile }: LayoutProps) {
   ];
 
   return (
-    <div className="flex h-screen bg-bg text-white font-sans">
+    <div className="flex h-screen bg-bg text-text-main font-sans">
       {/* Sidebar */}
       <aside className="w-60 border-r border-border-accent flex flex-col p-6 gap-8">
         <div className="flex items-center gap-2">
@@ -84,6 +105,13 @@ export default function Layout({ user, profile }: LayoutProps) {
             Buscar activos (ej: AAPL, BTC, SOL)...
           </div>
           <div className="flex items-center gap-4 text-xs">
+            <button 
+              onClick={toggleTheme}
+              className="p-2 bg-surface border border-border-accent rounded-xl hover:text-accent transition-all"
+              title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
+            >
+              {isLight ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+            </button>
             <span className="flex items-center gap-2 text-text-dim">
               <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
               Live Market Data

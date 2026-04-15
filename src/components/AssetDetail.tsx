@@ -113,16 +113,16 @@ export default function AssetDetail() {
       {/* Performance Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Daily', change: '+2.4%', value: '$12.40', up: true },
-          { label: 'Weekly', change: '+8.1%', value: '$45.20', up: true },
-          { label: 'Monthly', change: '-3.2%', value: '-$18.50', up: false },
-          { label: 'Annual', change: '+142.5%', value: '$840.00', up: true },
+          { label: 'Daily', change: '+2.4%', up: true },
+          { label: 'Weekly', change: '+8.1%', up: true },
+          { label: 'Monthly', change: '-3.2%', up: false },
+          { label: 'Annual', change: '+142.5%', up: true },
         ].map((stat) => (
           <div key={stat.label} className="bento-card !p-4">
             <div className="text-[9px] text-text-dim uppercase font-black tracking-widest mb-1">{stat.label} Performance</div>
             <div className="flex justify-between items-end">
-              <div className="text-lg font-bold">{stat.value}</div>
-              <div className={`stat-badge ${stat.up ? 'stat-up' : 'stat-down'}`}>{stat.change}</div>
+              <div className={`text-lg font-bold ${stat.up ? 'text-accent' : 'text-loss'}`}>{stat.change}</div>
+              <div className={`stat-badge ${stat.up ? 'stat-up' : 'stat-down'}`}>Trend</div>
             </div>
           </div>
         ))}

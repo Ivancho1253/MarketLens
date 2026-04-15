@@ -1,26 +1,47 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #050505;
-  --color-surface: #121214;
-  --color-border-accent: #222224;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-border-accent: var(--border-accent);
   --color-accent: #00FF88;
   --color-accent-soft: rgba(0, 255, 136, 0.1);
   --color-loss: #FF4D4D;
-  --color-text-dim: #8F8F91;
+  --color-text-dim: var(--text-dim);
+  --color-text-main: var(--text-main);
   
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
+:root {
+  --bg: #050505;
+  --surface: #121214;
+  --border-accent: #222224;
+  --text-dim: #8F8F91;
+  --text-main: #ffffff;
+}
+
+:root.light {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --border-accent: #e2e8f0;
+  --text-dim: #64748b;
+  --text-main: #0f172a;
+}
+
 @layer base {
   body {
-    @apply bg-bg text-white font-sans;
+    @apply bg-bg text-text-main font-sans transition-colors duration-300;
   }
 }
 
 .bento-card {
   @apply bg-surface border border-border-accent rounded-2xl p-5 relative transition-all duration-500 overflow-hidden;
-  background: linear-gradient(145deg, rgba(18, 18, 20, 1) 0%, rgba(10, 10, 12, 1) 100%);
+  background: var(--surface);
+}
+
+.light .bento-card {
+  @apply shadow-sm;
 }
 
 .bento-card::before {
