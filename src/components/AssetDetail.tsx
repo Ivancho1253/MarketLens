@@ -45,6 +45,7 @@ export default function AssetDetail() {
   };
 
   useEffect(() => {
+    const isLight = document.documentElement.classList.contains('light');
     const script = document.createElement('script');
     script.src = 'https://s3.tradingview.com/tv.js';
     script.async = true;
@@ -55,23 +56,49 @@ export default function AssetDetail() {
           symbol: type === 'cryptos' ? `BINANCE:${symbol}USDT` : `NASDAQ:${symbol}`,
           interval: 'D',
           timezone: 'Etc/UTC',
-          theme: 'dark',
+          theme: isLight ? 'light' : 'dark',
           style: '1',
           locale: 'en',
-          toolbar_bg: '#f1f3f6',
+          toolbar_bg: isLight ? '#f8fafc' : '#f1f3f6',
           enable_publishing: false,
           allow_symbol_change: true,
           container_id: 'tradingview_widget',
-          backgroundColor: '#050505',
-          gridColor: 'rgba(255, 255, 255, 0.05)',
+          backgroundColor: isLight ? '#ffffff' : '#050505',
+          gridColor: isLight ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.05)',
           hide_side_toolbar: false,
         });
       }
     };
     document.head.appendChild(script);
 
+    // Listen for theme changes to re-render widget
+    const observer = new MutationObserver(() => {
+      const currentIsLight = document.documentElement.classList.contains('light');
+      if (window.TradingView && containerRef.current) {
+        // Re-initialize widget
+        new window.TradingView.widget({
+          autosize: true,
+          symbol: type === 'cryptos' ? `BINANCE:${symbol}USDT` : `NASDAQ:${symbol}`,
+          interval: 'D',
+          timezone: 'Etc/UTC',
+          theme: currentIsLight ? 'light' : 'dark',
+          style: '1',
+          locale: 'en',
+          toolbar_bg: currentIsLight ? '#f8fafc' : '#f1f3f6',
+          enable_publishing: false,
+          allow_symbol_change: true,
+          container_id: 'tradingview_widget',
+          backgroundColor: currentIsLight ? '#ffffff' : '#050505',
+          gridColor: currentIsLight ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.05)',
+          hide_side_toolbar: false,
+        });
+      }
+    });
+
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
     return () => {
-      // Cleanup script if needed, though TradingView widget handles most of it
+      observer.disconnect();
     };
   }, [symbol, type]);
 
@@ -103,7 +130,7 @@ export default function AssetDetail() {
         </div>
         <button 
           onClick={toggleFavorite}
-          className={`ml-auto p-4 rounded-2xl border transition-all flex items-center gap-2 font-bold text-xs uppercase tracking-widest ${isFavorite ? 'bg-accent/10 border-accent/50 text-accent' : 'bg-surface border-border-accent text-text-dim hover:text-white'}`}
+          className={`ml-auto p-4 rounded-2xl border transition-all flex items-center gap-2 font-bold text-xs uppercase tracking-widest ${isFavorite ? 'bg-accent/10 border-accent/50 text-accent' : 'bg-surface border-border-accent text-text-dim hover:text-text-main'}`}
         >
           <Star className={`w-5 h-5 ${isFavorite ? 'fill-accent' : ''}`} />
           {isFavorite ? 'Favorited' : 'Add to Favorites'}
@@ -172,10 +199,10 @@ export default function AssetDetail() {
               </div>
               <div className="flex justify-between text-[9px] uppercase font-bold text-text-dim">
                 <span>Sell</span>
-                <span className="text-white">Strong Buy</span>
+                <span className="text-text-main">Strong Buy</span>
               </div>
               
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border-accent">
                 <div>
                   <div className="text-[9px] text-text-dim uppercase font-bold">RSI (14)</div>
                   <div className="text-xs font-bold text-accent">64.2 (Bullish)</div>

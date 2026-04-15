@@ -81,7 +81,7 @@ export default function Dashboard() {
         <div className="card-title">Activos Destacados</div>
         <div className="flex-1 space-y-1">
           {assets.slice(0, 6).map((asset) => (
-            <div key={asset.id} className="flex justify-between items-center py-3 border-b border-border-accent last:border-0 hover:bg-white/5 transition-colors px-2 -mx-2 rounded-lg cursor-pointer group">
+            <div key={asset.id} className="flex justify-between items-center py-3 border-b border-border-accent last:border-0 hover:bg-accent/5 transition-colors px-2 -mx-2 rounded-lg cursor-pointer group">
               <div className="flex items-center gap-3">
                 <CompanyLogo 
                   symbol={asset.symbol} 
@@ -119,18 +119,18 @@ export default function Dashboard() {
             <AreaChart data={mockChartData}>
               <defs>
                 <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#00FF88" stopOpacity={0.2}/>
-                  <stop offset="95%" stopColor="#00FF88" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.2}/>
+                  <stop offset="95%" stopColor="var(--accent)" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#222" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#8F8F91', fontSize: 10}} />
-              <YAxis axisLine={false} tickLine={false} tick={{fill: '#8F8F91', fontSize: 10}} />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-accent)" />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'var(--text-dim)', fontSize: 10}} />
+              <YAxis axisLine={false} tickLine={false} tick={{fill: 'var(--text-dim)', fontSize: 10}} />
               <Tooltip 
-                contentStyle={{backgroundColor: '#121214', border: '1px solid #222224', borderRadius: '8px', color: '#fff', fontSize: 12}}
-                itemStyle={{color: '#00FF88'}}
+                contentStyle={{backgroundColor: 'var(--surface)', border: '1px solid var(--border-accent)', borderRadius: '8px', color: 'var(--text-main)', fontSize: 12}}
+                itemStyle={{color: 'var(--accent)'}}
               />
-              <Area type="monotone" dataKey="value" stroke="#00FF88" fillOpacity={1} fill="url(#colorValue)" strokeWidth={2} />
+              <Area type="monotone" dataKey="value" stroke="var(--accent)" fillOpacity={1} fill="url(#colorValue)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </div>

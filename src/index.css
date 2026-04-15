@@ -4,8 +4,8 @@
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-border-accent: var(--border-accent);
-  --color-accent: #00FF88;
-  --color-accent-soft: rgba(0, 255, 136, 0.1);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
   --color-loss: #FF4D4D;
   --color-text-dim: var(--text-dim);
   --color-text-main: var(--text-main);
@@ -19,14 +19,20 @@
   --border-accent: #222224;
   --text-dim: #8F8F91;
   --text-main: #ffffff;
+  --accent: #00FF88;
+  --accent-soft: rgba(0, 255, 136, 0.1);
+  --nav-active: #121214;
 }
 
 :root.light {
   --bg: #f8fafc;
   --surface: #ffffff;
   --border-accent: #e2e8f0;
-  --text-dim: #64748b;
+  --text-dim: #334155; /* Even darker for maximum visibility */
   --text-main: #0f172a;
+  --accent: #065f46; /* Darker emerald for better contrast */
+  --accent-soft: rgba(6, 95, 70, 0.1);
+  --nav-active: #f1f5f9;
 }
 
 @layer base {
@@ -59,7 +65,7 @@
 }
 
 .glass-panel {
-  @apply bg-surface/40 backdrop-blur-xl border border-white/5 rounded-2xl;
+  @apply bg-surface/40 backdrop-blur-xl border border-border-accent rounded-2xl;
 }
 
 .stat-badge {

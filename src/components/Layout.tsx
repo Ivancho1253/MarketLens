@@ -57,11 +57,12 @@ export default function Layout({ user, profile }: LayoutProps) {
               <li key={item.path}>
                 <Link
                   to={item.path}
+                  style={{ backgroundColor: location.pathname === item.path ? 'var(--nav-active)' : 'transparent' }}
                   className={cn(
                     "flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all border border-transparent",
                     location.pathname === item.path 
-                      ? "bg-surface text-white border-border-accent" 
-                      : "text-text-dim hover:text-white"
+                      ? "text-text-main border-border-accent" 
+                      : "text-text-dim hover:text-text-main"
                   )}
                 >
                   <item.icon className="w-4 h-4" />

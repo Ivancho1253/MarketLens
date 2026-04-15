@@ -166,7 +166,7 @@ export default function Portfolio() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs font-bold text-white">${(asset.averagePrice * asset.totalQuantity).toLocaleString()}</div>
+                    <div className="text-xs font-bold text-text-main">${(asset.averagePrice * asset.totalQuantity).toLocaleString()}</div>
                     <div className="text-[10px] text-text-dim">{asset.totalQuantity} Units</div>
                   </div>
                 </div>

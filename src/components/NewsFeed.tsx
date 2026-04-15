@@ -41,7 +41,7 @@ export default function NewsFeed() {
               key={cat}
               onClick={() => setQuery(cat.toLowerCase())}
               className={`px-4 py-1 border border-border-accent rounded-full text-[10px] uppercase transition-all ${
-                query === cat.toLowerCase() ? 'bg-accent text-bg border-accent' : 'text-text-dim hover:text-white hover:border-white'
+                query === cat.toLowerCase() ? 'bg-accent text-bg border-accent' : 'text-text-dim hover:text-text-main hover:border-text-main'
               }`}
             >
               {cat}
@@ -81,7 +81,7 @@ export default function NewsFeed() {
                   href={article.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="mt-auto flex items-center justify-center gap-2 border border-border-accent rounded-lg p-2 text-[10px] uppercase font-bold hover:bg-white hover:text-bg transition-all"
+                  className="mt-auto flex items-center justify-center gap-2 border border-border-accent rounded-lg p-2 text-[10px] uppercase font-bold hover:bg-text-main hover:text-bg transition-all"
                 >
                   Read Full Report <ExternalLink className="w-3 h-3" />
                 </a>
@@ -112,7 +112,7 @@ export default function NewsFeed() {
                   item.sentiment === 'Bearish' ? 'text-loss' : 'text-yellow-400'
                 }`}>{item.sentiment}</span>
               </div>
-              <div className="w-full bg-white/5 h-1 mt-2 rounded-full overflow-hidden">
+              <div className="w-full bg-surface h-1 mt-2 rounded-full overflow-hidden">
                 <div className="bg-accent h-full" style={{ width: `${item.score}%` }} />
               </div>
               <div className="mt-2 text-[8px] text-text-dim uppercase tracking-widest">Score: {item.score}/100</div>

@@ -15,6 +15,8 @@ export default function CompanyLogo({ symbol, name, type = 'stock', className = 
 
   useEffect(() => {
     const fetchLogo = async () => {
+      if (!symbol) return;
+
       if (type === 'crypto') {
         setLogoUrl(`https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/${symbol.toLowerCase()}.png`);
         return;
@@ -34,8 +36,10 @@ export default function CompanyLogo({ symbol, name, type = 'stock', className = 
         }
       } catch (e) {
         // Fallback 2: Clearbit with first word of name
-        const nameUrl = `https://logo.clearbit.com/${name.split(' ')[0].replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}.com`;
-        setLogoUrl(nameUrl);
+        if (name) {
+          const nameUrl = `https://logo.clearbit.com/${name.split(' ')[0].replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}.com`;
+          setLogoUrl(nameUrl);
+        }
       }
     };
 

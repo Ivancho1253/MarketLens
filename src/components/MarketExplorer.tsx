@@ -17,6 +17,7 @@ interface MarketAsset {
 export default function MarketExplorer() {
   const [stocks, setStocks] = useState<MarketAsset[]>([]);
   const [cryptos, setCryptos] = useState<MarketAsset[]>([]);
+  const [hotAssets, setHotAssets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState<'stocks' | 'cryptos' | 'favorites'>('stocks');
@@ -41,15 +42,18 @@ export default function MarketExplorer() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [stocksRes, cryptosRes] = await Promise.all([
+        const [stocksRes, cryptosRes, hotRes] = await Promise.all([
           fetch('/api/market/stocks'),
-          fetch('/api/market/cryptos')
+          fetch('/api/market/cryptos'),
+          fetch('/api/market/hot')
         ]);
         const stocksData = await stocksRes.json();
         const cryptosData = await cryptosRes.json();
+        const hotData = await hotRes.json();
         
-        setStocks(stocksData.data?.slice(0, 100) || []);
-        setCryptos(cryptosData.data?.slice(0, 100) || []);
+        setStocks(stocksData.data || []);
+        setCryptos(cryptosData.data || []);
+        setHotAssets(hotData.data || []);
       } catch (error) {
         console.error("Error fetching market data:", error);
       } finally {
@@ -86,8 +90,8 @@ export default function MarketExplorer() {
   };
 
   const filteredAssets = getAssetsToDisplay().filter(asset => 
-    asset.symbol.toLowerCase().includes(search.toLowerCase()) || 
-    asset.name.toLowerCase().includes(search.toLowerCase())
+    (asset.symbol?.toLowerCase() || '').includes(search.toLowerCase()) || 
+    (asset.name?.toLowerCase() || '').includes(search.toLowerCase())
   );
 
   return (
@@ -101,25 +105,47 @@ export default function MarketExplorer() {
         <div className="flex items-center gap-2 bg-surface border border-border-accent p-1 rounded-xl">
           <button 
             onClick={() => setActiveTab('stocks')}
-            className={`px-4 py-1.5 rounded-lg text-[10px] uppercase font-bold transition-all ${activeTab === 'stocks' ? 'bg-accent text-bg' : 'text-text-dim hover:text-white'}`}
+            className={`px-4 py-1.5 rounded-lg text-[10px] uppercase font-bold transition-all ${activeTab === 'stocks' ? 'bg-accent text-bg' : 'text-text-dim hover:text-text-main'}`}
           >
             Stocks
           </button>
           <button 
             onClick={() => setActiveTab('cryptos')}
-            className={`px-4 py-1.5 rounded-lg text-[10px] uppercase font-bold transition-all ${activeTab === 'cryptos' ? 'bg-accent text-bg' : 'text-text-dim hover:text-white'}`}
+            className={`px-4 py-1.5 rounded-lg text-[10px] uppercase font-bold transition-all ${activeTab === 'cryptos' ? 'bg-accent text-bg' : 'text-text-dim hover:text-text-main'}`}
           >
             Cryptocurrencies
           </button>
           <button 
             onClick={() => setActiveTab('favorites')}
-            className={`px-4 py-1.5 rounded-lg text-[10px] uppercase font-bold transition-all ${activeTab === 'favorites' ? 'bg-accent text-bg' : 'text-text-dim hover:text-white'} flex items-center gap-1.5`}
+            className={`px-4 py-1.5 rounded-lg text-[10px] uppercase font-bold transition-all ${activeTab === 'favorites' ? 'bg-accent text-bg' : 'text-text-dim hover:text-text-main'} flex items-center gap-1.5`}
           >
             <Star className={`w-3 h-3 ${activeTab === 'favorites' ? 'fill-bg' : ''}`} />
             Favorites
           </button>
         </div>
       </div>
+
+      {/* Hot Assets Header */}
+      {!loading && hotAssets.length > 0 && (
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+          {hotAssets.map((asset) => (
+            <Link 
+              key={asset.symbol}
+              to={`/explorer/${asset.type === 'crypto' ? 'cryptos' : 'stocks'}/${asset.symbol}`}
+              className="bento-card !p-3 hover:border-accent/50 transition-all group"
+            >
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-[9px] font-black text-text-main">{asset.symbol}</span>
+                <TrendingUp className="w-2 h-2 text-accent" />
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-[10px] font-bold text-accent">+{asset.change}%</span>
+                <span className="text-[8px] text-text-dim uppercase">7D</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
 
       <div className="relative">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-dim" />
@@ -173,7 +199,7 @@ export default function MarketExplorer() {
                   </button>
                   <div className="text-right">
                     <div className="text-[9px] text-text-dim uppercase font-bold tracking-widest">{asset.exchange || 'Global'}</div>
-                    <div className="text-xs font-black text-white mt-1">{asset.symbol}</div>
+                    <div className="text-xs font-black text-text-main mt-1">{asset.symbol}</div>
                   </div>
                 </div>
               </div>
@@ -185,10 +211,10 @@ export default function MarketExplorer() {
                 <div className="text-[9px] text-text-dim uppercase font-bold">24H Vol</div>
               </div>
 
-              <div className="mt-6 flex justify-between items-center pt-4 border-t border-white/5">
+              <div className="mt-6 flex justify-between items-center pt-4 border-t border-border-accent">
                 <div className="flex -space-x-2">
                   {[1, 2, 3].map(i => (
-                    <div key={i} className="w-5 h-5 rounded-full border border-surface bg-bg flex items-center justify-center text-[8px] text-text-dim">
+                    <div key={i} className="w-5 h-5 rounded-full border border-border-accent bg-bg flex items-center justify-center text-[8px] text-text-main font-bold">
                       {i}
                     </div>
                   ))}
