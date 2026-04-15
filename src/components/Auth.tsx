@@ -60,7 +60,7 @@ export default function Auth() {
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
             <img 
-              src="https://chatgpt.com/backend-api/estuary/content?id=file_00000000ae1871f5a8f925de14542cf8&ts=493413&p=fs&cid=1&sig=544363e48ba03522eb389bda4b571cef7a8914e5f4ed2e5fbff1756e14c09479&v=0" 
+              src="/logo.png" 
               alt="MarketLens Logo" 
               className="w-16 h-16 object-contain drop-shadow-[0_0_10px_rgba(0,255,136,0.3)]" 
               referrerPolicy="no-referrer" 

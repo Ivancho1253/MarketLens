@@ -58,7 +58,7 @@ export default function LandingPage() {
       <nav className="relative z-50 flex items-center justify-between px-6 py-6 max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
           <img 
-            src="https://chatgpt.com/backend-api/estuary/content?id=file_00000000ae1871f5a8f925de14542cf8&ts=493413&p=fs&cid=1&sig=544363e48ba03522eb389bda4b571cef7a8914e5f4ed2e5fbff1756e14c09479&v=0" 
+            src="/logo.png" 
             alt="MarketLens Logo" 
             className="w-10 h-10 object-contain" 
             referrerPolicy="no-referrer" 
