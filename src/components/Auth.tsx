@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { auth } from '../lib/firebase';
 import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { TrendingUp, ShieldCheck } from 'lucide-react';
+import { TrendingUp, ShieldCheck, ArrowLeft } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import LanguageSelector from './LanguageSelector';
 
 export default function Auth() {
+  const navigate = useNavigate();
+  const { t } = useLanguage();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,48 +38,65 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-bg flex items-center justify-center p-4 font-sans">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-[#050505] flex items-center justify-center p-4 font-sans relative overflow-hidden">
+      {/* Background Glows */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-accent/5 blur-[120px] rounded-full" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/5 blur-[120px] rounded-full" />
+
+      {/* Language Selector Top Right */}
+      <div className="absolute top-6 right-6 z-50">
+        <LanguageSelector />
+      </div>
+
+      <div className="w-full max-w-md relative z-10">
+        <button 
+          onClick={() => navigate('/')}
+          className="absolute -top-16 left-0 flex items-center gap-2 text-[10px] uppercase font-bold tracking-widest text-text-dim hover:text-accent transition-colors group"
+        >
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          {t('backToLanding')}
+        </button>
+
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <div className="w-12 h-12 bg-accent rounded-2xl flex items-center justify-center text-bg">
+            <div className="w-12 h-12 bg-accent rounded-2xl flex items-center justify-center text-bg shadow-[0_0_20px_rgba(0,255,136,0.3)]">
               <TrendingUp className="w-8 h-8" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold tracking-tighter uppercase">MARKET<span className="text-accent">LENS</span></h1>
-          <p className="text-[10px] text-text-dim uppercase tracking-widest mt-2">Institutional Grade Portfolio Analysis</p>
+          <h1 className="text-3xl font-black tracking-tighter uppercase">MARKET<span className="text-accent">LENS</span></h1>
+          <p className="text-[10px] text-text-dim uppercase tracking-widest mt-2 font-bold">Institutional Grade Portfolio Analysis</p>
         </div>
 
-        <div className="bento-card">
-          <h2 className="text-sm font-bold uppercase mb-6 border-b border-border-accent pb-2">
-            {isLogin ? 'Acceso al Sistema' : 'Registro de Usuario'}
+        <div className="bento-card !bg-white/5 border-white/10 backdrop-blur-xl">
+          <h2 className="text-xs font-black uppercase mb-8 border-b border-white/5 pb-4 tracking-widest">
+            {isLogin ? t('systemAccess') : t('createAccount')}
           </h2>
 
           {error && (
-            <div className="bg-loss/10 border border-loss/50 p-3 mb-6 text-[10px] text-loss uppercase font-bold rounded-lg">
+            <div className="bg-loss/10 border border-loss/50 p-4 mb-8 text-[10px] text-loss uppercase font-black rounded-xl animate-shake">
               ERROR: {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-[10px] uppercase text-text-dim mb-1">Email Address</label>
+              <label className="block text-[10px] uppercase text-text-dim mb-2 font-bold tracking-widest">{t('emailLabel')}</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-bg border border-border-accent rounded-lg p-3 text-xs focus:outline-none focus:border-accent transition-all"
+                className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-xs focus:outline-none focus:border-accent transition-all font-bold"
                 placeholder="name@company.com"
                 required
               />
             </div>
             <div>
-              <label className="block text-[10px] uppercase text-text-dim mb-1">Password</label>
+              <label className="block text-[10px] uppercase text-text-dim mb-2 font-bold tracking-widest">{t('passwordLabel')}</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-bg border border-border-accent rounded-lg p-3 text-xs focus:outline-none focus:border-accent transition-all"
+                className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-xs focus:outline-none focus:border-accent transition-all font-bold"
                 placeholder="••••••••"
                 required
               />
@@ -82,43 +104,43 @@ export default function Auth() {
 
             <button
               type="submit"
-              className="w-full bg-accent text-bg py-3 rounded-lg text-xs uppercase font-bold hover:opacity-90 transition-all"
+              className="w-full bg-accent text-bg py-4 rounded-xl text-xs uppercase font-black tracking-widest hover:opacity-90 transition-all shadow-[0_10px_20px_-5px_rgba(0,255,136,0.3)]"
             >
-              {isLogin ? 'Iniciar Sesión' : 'Crear Cuenta'}
+              {isLogin ? t('signIn') : t('register')}
             </button>
           </form>
 
-          <div className="relative my-8">
+          <div className="relative my-10">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border-accent"></div>
+              <div className="w-full border-t border-white/5"></div>
             </div>
-            <div className="relative flex justify-center text-[10px] uppercase">
-              <span className="bg-surface px-2 text-text-dim">O continuar con</span>
+            <div className="relative flex justify-center text-[9px] uppercase font-bold tracking-widest">
+              <span className="bg-[#0A0A0A] px-4 text-text-dim">{t('orContinueWith')}</span>
             </div>
           </div>
 
           <button
             onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-3 bg-bg border border-border-accent py-3 rounded-lg text-xs uppercase font-bold hover:bg-white hover:text-bg transition-all"
+            className="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 py-4 rounded-xl text-xs uppercase font-black tracking-widest hover:bg-white hover:text-bg transition-all"
           >
             <img src="https://www.google.com/favicon.ico" className="w-4 h-4" alt="Google" referrerPolicy="no-referrer" />
             Google Account
           </button>
 
-          <p className="mt-8 text-center text-[10px] text-text-dim uppercase">
-            {isLogin ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?'}
+          <p className="mt-10 text-center text-[10px] text-text-dim uppercase font-bold tracking-widest">
+            {isLogin ? t('noAccount') : t('haveAccount')}
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="ml-2 text-accent font-bold hover:underline"
+              className="ml-2 text-accent font-black hover:underline"
             >
-              {isLogin ? 'Regístrate aquí' : 'Inicia sesión'}
+              {isLogin ? t('registerNow') : t('signInNow')}
             </button>
           </p>
         </div>
 
-        <div className="mt-8 flex items-center justify-center gap-2 opacity-20">
+        <div className="mt-12 flex items-center justify-center gap-2 opacity-20">
           <ShieldCheck className="w-4 h-4" />
-          <span className="text-[8px] uppercase tracking-widest">End-to-End Encryption Active</span>
+          <span className="text-[8px] uppercase tracking-widest font-bold">End-to-End Encryption Active</span>
         </div>
       </div>
     </div>

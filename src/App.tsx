@@ -11,6 +11,8 @@ import MarketExplorer from './components/MarketExplorer';
 import AssetDetail from './components/AssetDetail';
 import Auth from './components/Auth';
 import { UserProfile } from './types';
+import LandingPage from './components/LandingPage';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -54,21 +56,27 @@ export default function App() {
   }
 
   return (
-    <Router>
-      <Routes>
-        {!user ? (
-          <Route path="*" element={<Auth />} />
-        ) : (
-          <Route element={<Layout user={user} profile={profile} />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/explorer" element={<MarketExplorer />} />
-            <Route path="/explorer/:type/:symbol" element={<AssetDetail />} />
-            <Route path="/news" element={<NewsFeed />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Route>
-        )}
-      </Routes>
-    </Router>
+    <LanguageProvider>
+      <Router>
+        <Routes>
+          {!user ? (
+            <>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </>
+          ) : (
+            <Route element={<Layout user={user} profile={profile} />}>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/portfolio" element={<Portfolio />} />
+              <Route path="/explorer" element={<MarketExplorer />} />
+              <Route path="/explorer/:type/:symbol" element={<AssetDetail />} />
+              <Route path="/news" element={<NewsFeed />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Route>
+          )}
+        </Routes>
+      </Router>
+    </LanguageProvider>
   );
 }
