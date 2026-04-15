@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #050505;
+  --color-surface: #121214;
+  --color-border-accent: #222224;
+  --color-accent: #00FF88;
+  --color-accent-soft: rgba(0, 255, 136, 0.1);
+  --color-loss: #FF4D4D;
+  --color-text-dim: #8F8F91;
+  
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-white font-sans;
+  }
+}
+
+.bento-card {
+  @apply bg-surface border border-border-accent rounded-2xl p-5 relative transition-all duration-300;
+}
+
+.bento-card:hover {
+  @apply border-accent/30;
+}
+
+.card-title {
+  @apply text-[10px] uppercase tracking-wider text-text-dim mb-3 font-semibold;
+}

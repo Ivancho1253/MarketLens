@@ -1,0 +1,60 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User account information and settings",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "currency": { "type": "string", "enum": ["USD", "EUR", "GBP"] }
+      },
+      "required": ["uid", "email"]
+    },
+    "Asset": {
+      "title": "Asset",
+      "description": "A financial asset in a portfolio",
+      "type": "object",
+      "properties": {
+        "symbol": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["stock", "crypto"] },
+        "averagePrice": { "type": "number" },
+        "totalQuantity": { "type": "number" },
+        "lastUpdated": { "type": "string", "format": "date-time" }
+      },
+      "required": ["symbol", "type"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "A buy or sell operation",
+      "type": "object",
+      "properties": {
+        "assetSymbol": { "type": "string" },
+        "type": { "type": "string", "enum": ["buy", "sell"] },
+        "quantity": { "type": "number" },
+        "price": { "type": "number" },
+        "date": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["assetSymbol", "type", "quantity", "price", "userId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile documents"
+    },
+    "/users/{userId}/assets/{assetId}": {
+      "schema": "Asset",
+      "description": "Assets owned by the user"
+    },
+    "/users/{userId}/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Transaction history for the user"
+    }
+  }
+}

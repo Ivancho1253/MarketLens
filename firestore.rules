@@ -1,0 +1,98 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - uid: string (required)
+    //   - email: string (required)
+    //   - displayName: string
+    //   - photoURL: string
+    //   - currency: string (enum: USD, EUR, GBP)
+    //
+    // Collection: users/{userId}/assets
+    // Document ID: {symbol}
+    // Fields:
+    //   - symbol: string (required)
+    //   - name: string
+    //   - type: string (enum: stock, crypto)
+    //   - averagePrice: number
+    //   - totalQuantity: number
+    //   - lastUpdated: timestamp
+    //
+    // Collection: users/{userId}/transactions
+    // Document ID: {txId}
+    // Fields:
+    //   - assetSymbol: string
+    //   - type: string (enum: buy, sell)
+    //   - quantity: number
+    //   - price: number
+    //   - date: timestamp
+    //   - userId: string
+    //
+    // ===============================================================
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email']) &&
+             data.uid == request.auth.uid &&
+             isValidEmail(data.email) &&
+             (data.currency in ['USD', 'EUR', 'GBP']);
+    }
+
+    function isValidAsset(data) {
+      return data.keys().hasAll(['symbol', 'type']) &&
+             data.symbol is string &&
+             data.type in ['stock', 'crypto'] &&
+             data.averagePrice is number &&
+             data.totalQuantity is number;
+    }
+
+    function isValidTransaction(data, userId) {
+      return data.keys().hasAll(['assetSymbol', 'type', 'quantity', 'price', 'userId']) &&
+             data.userId == userId &&
+             data.type in ['buy', 'sell'] &&
+             data.quantity is number &&
+             data.price is number;
+    }
+
+    // User Profiles
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidUser(request.resource.data);
+
+      // Assets Subcollection
+      match /assets/{assetId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidAsset(request.resource.data);
+        allow update: if isOwner(userId) && isValidAsset(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      // Transactions Subcollection
+      match /transactions/{txId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidTransaction(request.resource.data, userId);
+        allow update: if false; // Transactions are immutable
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}
