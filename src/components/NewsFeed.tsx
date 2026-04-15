@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { NewsArticle } from '../types';
-import { ExternalLink, Clock, TrendingUp, Globe } from 'lucide-react';
+import { ExternalLink, Clock, TrendingUp, Globe, ArrowLeft } from 'lucide-react';
 
 export default function NewsFeed() {
+  const navigate = useNavigate();
   const [news, setNews] = useState<NewsArticle[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('finance');
@@ -31,9 +33,17 @@ export default function NewsFeed() {
   return (
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tighter uppercase">Market Intelligence</h1>
-          <p className="text-[10px] text-text-dim uppercase">Global news and social sentiment</p>
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={() => navigate(-1)}
+            className="p-3 bg-surface border border-border-accent rounded-2xl hover:text-accent transition-all group"
+          >
+            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+          </button>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tighter uppercase">Market Intelligence</h1>
+            <p className="text-[10px] text-text-dim uppercase">Global news and social sentiment</p>
+          </div>
         </div>
         <div className="flex gap-2 flex-wrap">
           {categories.map((cat) => (
@@ -112,8 +122,11 @@ export default function NewsFeed() {
                   item.sentiment === 'Bearish' ? 'text-loss' : 'text-yellow-400'
                 }`}>{item.sentiment}</span>
               </div>
-              <div className="w-full bg-surface h-1 mt-2 rounded-full overflow-hidden">
-                <div className="bg-accent h-full" style={{ width: `${item.score}%` }} />
+              <div className="w-full bg-surface h-1.5 mt-2 rounded-full overflow-hidden">
+                <div className={`h-full transition-all duration-1000 ${
+                  item.sentiment === 'Bullish' ? 'bg-accent shadow-[0_0_10px_rgba(0,255,136,0.5)]' : 
+                  item.sentiment === 'Bearish' ? 'bg-loss shadow-[0_0_10px_rgba(255,77,77,0.5)]' : 'bg-yellow-400'
+                }`} style={{ width: `${item.score}%` }} />
               </div>
               <div className="mt-2 text-[8px] text-text-dim uppercase tracking-widest">Score: {item.score}/100</div>
             </div>

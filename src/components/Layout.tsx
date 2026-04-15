@@ -5,6 +5,7 @@ import { UserProfile } from '../types';
 import { LayoutDashboard, Wallet, Newspaper, LogOut, TrendingUp, Compass, Sun, Moon } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { cn } from '../lib/utils';
+import TickerTape from './TickerTape';
 
 interface LayoutProps {
   user: User;
@@ -100,7 +101,8 @@ export default function Layout({ user, profile }: LayoutProps) {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto flex flex-col">
+        <TickerTape />
         <header className="h-16 border-b border-border-accent flex items-center justify-between px-8 bg-bg/50 backdrop-blur-md sticky top-0 z-10">
           <div className="bg-surface border border-border-accent px-4 py-2 rounded-full w-80 text-xs text-text-dim">
             Buscar activos (ej: AAPL, BTC, SOL)...

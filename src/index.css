@@ -15,65 +15,65 @@
 
 :root {
   --bg: #050505;
-  --surface: #121214;
-  --border-accent: #222224;
-  --text-dim: #8F8F91;
-  --text-main: #ffffff;
-  --accent: #00FF88;
+  --surface: #0d0d0f;
+  --border-accent: #1e1e22;
+  --text-dim: #71717a;
+  --text-main: #fafafa;
+  --accent: #00ff88;
   --accent-soft: rgba(0, 255, 136, 0.1);
-  --nav-active: #121214;
+  --nav-active: #18181b;
+  --ticker-bg: #09090b;
+  --card-glow: rgba(0, 255, 136, 0.15);
 }
 
 :root.light {
-  --bg: #f8fafc;
+  --bg: #f1f5f9;
   --surface: #ffffff;
   --border-accent: #e2e8f0;
-  --text-dim: #334155; /* Even darker for maximum visibility */
+  --text-dim: #64748b;
   --text-main: #0f172a;
-  --accent: #065f46; /* Darker emerald for better contrast */
-  --accent-soft: rgba(6, 95, 70, 0.1);
-  --nav-active: #f1f5f9;
+  --accent: #10b981;
+  --accent-soft: rgba(16, 185, 129, 0.1);
+  --nav-active: #f8fafc;
+  --ticker-bg: #ffffff;
+  --card-glow: rgba(16, 185, 129, 0.1);
 }
 
 @layer base {
   body {
-    @apply bg-bg text-text-main font-sans transition-colors duration-300;
+    @apply bg-bg text-text-main font-sans transition-colors duration-300 antialiased;
   }
 }
 
 .bento-card {
-  @apply bg-surface border border-border-accent rounded-2xl p-5 relative transition-all duration-500 overflow-hidden;
+  @apply bg-surface border border-border-accent rounded-3xl p-6 relative transition-all duration-500 overflow-hidden;
   background: var(--surface);
 }
 
-.light .bento-card {
-  @apply shadow-sm;
-}
-
-.bento-card::before {
+.bento-card::after {
   content: '';
-  @apply absolute inset-0 opacity-0 transition-opacity duration-500 pointer-events-none;
-  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 255, 136, 0.08) 0%, transparent 60%);
+  @apply absolute inset-0 opacity-[0.02] pointer-events-none;
+  background: radial-gradient(circle at top right, var(--accent) 0%, transparent 70%);
 }
 
-.bento-card:hover::before {
-  @apply opacity-100;
+.light .bento-card {
+  @apply shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-slate-200;
 }
 
 .bento-card:hover {
-  @apply border-accent/40 -translate-y-1 shadow-[0_20px_40px_-15px_rgba(0,255,136,0.1)];
+  @apply border-accent/40 -translate-y-1.5 shadow-[0_20px_50px_-12px_var(--card-glow)];
 }
 
 .glass-panel {
-  @apply bg-surface/40 backdrop-blur-xl border border-border-accent rounded-2xl;
+  @apply bg-surface/60 backdrop-blur-2xl border border-border-accent rounded-3xl;
 }
 
 .stat-badge {
-  @apply px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider;
+  @apply px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-tighter;
 }
 
-.stat-up { @apply bg-accent/10 text-accent; }
-.stat-down { @apply bg-loss/10 text-loss; }
+.stat-up { @apply bg-accent/15 text-accent border border-accent/20; }
+.stat-down { @apply bg-loss/15 text-loss border border-loss/20; }
 
 @keyframes float {
   0% { transform: translateY(0px); }
@@ -85,6 +85,19 @@
   animation: float 6s ease-in-out infinite;
 }
 
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-ticker {
+  animation: ticker 40s linear infinite;
+}
+
 .card-title {
-  @apply text-[10px] uppercase tracking-wider text-text-dim mb-3 font-semibold;
+  @apply text-[11px] uppercase tracking-[0.2em] text-text-dim mb-4 font-black;
+}
+
+.data-value {
+  @apply font-mono tracking-tighter;
 }
