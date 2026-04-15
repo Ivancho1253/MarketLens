@@ -7,6 +7,8 @@ import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import Portfolio from './components/Portfolio';
 import NewsFeed from './components/NewsFeed';
+import MarketExplorer from './components/MarketExplorer';
+import AssetDetail from './components/AssetDetail';
 import Auth from './components/Auth';
 import { UserProfile } from './types';
 
@@ -60,6 +62,8 @@ export default function App() {
           <Route element={<Layout user={user} profile={profile} />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/explorer" element={<MarketExplorer />} />
+            <Route path="/explorer/:type/:symbol" element={<AssetDetail />} />
             <Route path="/news" element={<NewsFeed />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Route>

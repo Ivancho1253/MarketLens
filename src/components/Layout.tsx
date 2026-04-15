@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { User } from 'firebase/auth';
 import { UserProfile } from '../types';
-import { LayoutDashboard, Wallet, Newspaper, LogOut, TrendingUp } from 'lucide-react';
+import { LayoutDashboard, Wallet, Newspaper, LogOut, TrendingUp, Compass } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { cn } from '../lib/utils';
 
@@ -17,6 +17,7 @@ export default function Layout({ user, profile }: LayoutProps) {
   const navItems = [
     { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
     { path: '/portfolio', icon: Wallet, label: 'Portfolio' },
+    { path: '/explorer', icon: Compass, label: 'Explorar' },
     { path: '/news', icon: Newspaper, label: 'Market News' },
   ];
 

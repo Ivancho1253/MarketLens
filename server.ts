@@ -45,6 +45,28 @@ async function startServer() {
     }
   });
 
+  app.get("/api/market/stocks", async (req, res) => {
+    const apiKey = process.env.TWELVE_DATA_API_KEY;
+    if (!apiKey) return res.status(500).json({ error: "API key missing" });
+    try {
+      const response = await axios.get(`https://api.twelvedata.com/stocks?exchange=NASDAQ&apikey=${apiKey}`);
+      res.json(response.data);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch stocks" });
+    }
+  });
+
+  app.get("/api/market/cryptos", async (req, res) => {
+    const apiKey = process.env.TWELVE_DATA_API_KEY;
+    if (!apiKey) return res.status(500).json({ error: "API key missing" });
+    try {
+      const response = await axios.get(`https://api.twelvedata.com/cryptocurrencies?apikey=${apiKey}`);
+      res.json(response.data);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch cryptos" });
+    }
+  });
+
   // API Proxy for NewsAPI
   app.get("/api/news", async (req, res) => {
     const { q } = req.query;
