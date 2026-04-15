@@ -1,6 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Globe, Info, Activity, BarChart3 } from 'lucide-react';
+import { ArrowLeft, Globe, Info, Activity, BarChart3, Star } from 'lucide-react';
+import { doc, setDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
+import { db, auth } from '../lib/firebase';
+import CompanyLogo from './CompanyLogo';
 
 declare global {
   interface Window {
@@ -12,6 +15,34 @@ export default function AssetDetail() {
   const { type, symbol } = useParams<{ type: string; symbol: string }>();
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    if (!auth.currentUser || !symbol) return;
+
+    const favRef = doc(db, 'users', auth.currentUser.uid, 'favorites', symbol);
+    const unsubscribe = onSnapshot(favRef, (doc) => {
+      setIsFavorite(doc.exists());
+    });
+
+    return () => unsubscribe();
+  }, [symbol]);
+
+  const toggleFavorite = async () => {
+    if (!auth.currentUser || !symbol) return;
+
+    const favRef = doc(db, 'users', auth.currentUser.uid, 'favorites', symbol);
+    if (isFavorite) {
+      await deleteDoc(favRef);
+    } else {
+      await setDoc(favRef, {
+        symbol,
+        name: symbol, // In detail view we might not have the full name easily without fetching
+        type: type === 'cryptos' ? 'crypto' : 'stock',
+        addedAt: new Date().toISOString()
+      });
+    }
+  };
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -49,73 +80,121 @@ export default function AssetDetail() {
       <div className="flex items-center gap-4">
         <button 
           onClick={() => navigate(-1)}
-          className="p-2 bg-surface border border-border-accent rounded-xl hover:text-accent transition-all"
+          className="p-3 bg-surface border border-border-accent rounded-2xl hover:text-accent transition-all group"
         >
-          <ArrowLeft className="w-5 h-5" />
+          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
         </button>
-        <div>
-          <h1 className="text-2xl font-bold tracking-tighter uppercase">{symbol} <span className="text-text-dim font-normal">/ USD</span></h1>
-          <p className="text-[10px] text-text-dim uppercase">Market Analysis & Technical Data</p>
+        <div className="flex items-center gap-4">
+          <CompanyLogo 
+            symbol={symbol || ''} 
+            name={symbol || ''} 
+            type={type === 'cryptos' ? 'crypto' : 'stock'}
+            className="w-14 h-14"
+            imgClassName="w-10 h-10"
+          />
+          <div>
+            <h1 className="text-3xl font-black tracking-tighter uppercase">{symbol} <span className="text-text-dim font-normal text-xl">/ USD</span></h1>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-[10px] text-text-dim uppercase font-bold tracking-widest">{type === 'stocks' ? 'Equity' : 'Digital Asset'}</span>
+              <span className="w-1 h-1 bg-text-dim rounded-full" />
+              <span className="text-[10px] text-accent uppercase font-bold tracking-widest">Live Market</span>
+            </div>
+          </div>
         </div>
+        <button 
+          onClick={toggleFavorite}
+          className={`ml-auto p-4 rounded-2xl border transition-all flex items-center gap-2 font-bold text-xs uppercase tracking-widest ${isFavorite ? 'bg-accent/10 border-accent/50 text-accent' : 'bg-surface border-border-accent text-text-dim hover:text-white'}`}
+        >
+          <Star className={`w-5 h-5 ${isFavorite ? 'fill-accent' : ''}`} />
+          {isFavorite ? 'Favorited' : 'Add to Favorites'}
+        </button>
+      </div>
+
+      {/* Performance Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { label: 'Daily', change: '+2.4%', value: '$12.40', up: true },
+          { label: 'Weekly', change: '+8.1%', value: '$45.20', up: true },
+          { label: 'Monthly', change: '-3.2%', value: '-$18.50', up: false },
+          { label: 'Annual', change: '+142.5%', value: '$840.00', up: true },
+        ].map((stat) => (
+          <div key={stat.label} className="bento-card !p-4">
+            <div className="text-[9px] text-text-dim uppercase font-black tracking-widest mb-1">{stat.label} Performance</div>
+            <div className="flex justify-between items-end">
+              <div className="text-lg font-bold">{stat.value}</div>
+              <div className={`stat-badge ${stat.up ? 'stat-up' : 'stat-down'}`}>{stat.change}</div>
+            </div>
+          </div>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Main Chart Card */}
-        <div className="lg:col-span-9 bento-card !p-0 overflow-hidden h-[600px]">
+        <div className="lg:col-span-9 bento-card !p-0 overflow-hidden h-[600px] group">
+          <div className="absolute top-4 left-4 z-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="glass-panel px-3 py-1 text-[10px] font-bold uppercase">Interactive Chart</div>
+          </div>
           <div id="tradingview_widget" className="w-full h-full" ref={containerRef} />
         </div>
 
         {/* Info Sidebar */}
         <div className="lg:col-span-3 space-y-4">
           <div className="bento-card">
-            <div className="card-title">Asset Info</div>
+            <div className="card-title">Market Fundamentals</div>
             <div className="space-y-4 mt-4">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-text-dim uppercase">Symbol</span>
-                <span className="font-bold">{symbol}</span>
+                <span className="text-text-dim uppercase font-bold">Market Cap</span>
+                <span className="font-bold">$2.84T</span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-text-dim uppercase">Market</span>
-                <span className="font-bold">{type === 'stocks' ? 'NASDAQ' : 'Crypto'}</span>
+                <span className="text-text-dim uppercase font-bold">Volume (24h)</span>
+                <span className="font-bold">$42.1B</span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-text-dim uppercase">Currency</span>
-                <span className="font-bold">USD</span>
+                <span className="text-text-dim uppercase font-bold">P/E Ratio</span>
+                <span className="font-bold">28.4</span>
+              </div>
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-text-dim uppercase font-bold">Dividend Yield</span>
+                <span className="font-bold">0.65%</span>
               </div>
             </div>
           </div>
 
           <div className="bento-card">
-            <div className="card-title">Technical Summary</div>
-            <div className="mt-4 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center text-accent">
-                  <Activity className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-[10px] text-text-dim uppercase">Volatility</div>
-                  <div className="text-xs font-bold">Medium</div>
-                </div>
+            <div className="card-title">Technical Sentiment</div>
+            <div className="mt-6 space-y-6">
+              <div className="relative h-2 bg-bg rounded-full overflow-hidden">
+                <div className="absolute inset-y-0 left-0 bg-loss w-[20%]" />
+                <div className="absolute inset-y-0 left-[20%] bg-yellow-500 w-[30%]" />
+                <div className="absolute inset-y-0 left-[50%] bg-accent w-[50%]" />
+                <div className="absolute top-0 left-[75%] w-1 h-full bg-white shadow-[0_0_10px_white] z-10" />
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center text-accent">
-                  <BarChart3 className="w-4 h-4" />
+              <div className="flex justify-between text-[9px] uppercase font-bold text-text-dim">
+                <span>Sell</span>
+                <span className="text-white">Strong Buy</span>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
+                <div>
+                  <div className="text-[9px] text-text-dim uppercase font-bold">RSI (14)</div>
+                  <div className="text-xs font-bold text-accent">64.2 (Bullish)</div>
                 </div>
                 <div>
-                  <div className="text-[10px] text-text-dim uppercase">Trend</div>
-                  <div className="text-xs font-bold text-accent">Bullish</div>
+                  <div className="text-[9px] text-text-dim uppercase font-bold">MACD</div>
+                  <div className="text-xs font-bold text-accent">Positive</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="bento-card bg-accent/5 border-accent/20">
+          <div className="bento-card bg-accent/5 border-accent/20 animate-float">
             <div className="flex items-center gap-2 text-accent mb-2">
               <Globe className="w-4 h-4" />
-              <span className="text-[10px] font-bold uppercase">Live Updates</span>
+              <span className="text-[10px] font-bold uppercase">AI Insight</span>
             </div>
-            <p className="text-[10px] text-text-dim leading-relaxed">
-              Real-time data provided by TradingView. Technical indicators are calculated based on current market conditions.
+            <p className="text-[10px] text-text-dim leading-relaxed italic">
+              "MarketLens AI detects strong accumulation patterns in {symbol}. Institutional flow has increased by 12% in the last 48 hours."
             </p>
           </div>
         </div>

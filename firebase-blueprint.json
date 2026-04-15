@@ -41,6 +41,18 @@
         "userId": { "type": "string" }
       },
       "required": ["assetSymbol", "type", "quantity", "price", "userId"]
+    },
+    "Favorite": {
+      "title": "Favorite",
+      "description": "A favorited market asset",
+      "type": "object",
+      "properties": {
+        "symbol": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["stock", "crypto"] },
+        "addedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["symbol", "name", "type"]
     }
   },
   "firestore": {
@@ -55,6 +67,10 @@
     "/users/{userId}/transactions/{transactionId}": {
       "schema": "Transaction",
       "description": "Transaction history for the user"
+    },
+    "/users/{userId}/favorites/{favoriteId}": {
+      "schema": "Favorite",
+      "description": "User's favorite assets"
     }
   }
 }

@@ -72,6 +72,13 @@ service cloud.firestore {
              data.price is number;
     }
 
+    function isValidFavorite(data) {
+      return data.keys().hasAll(['symbol', 'name', 'type']) &&
+             data.symbol is string &&
+             data.name is string &&
+             data.type in ['stock', 'crypto'];
+    }
+
     // User Profiles
     match /users/{userId} {
       allow read: if isOwner(userId);
@@ -91,6 +98,14 @@ service cloud.firestore {
         allow read: if isOwner(userId);
         allow create: if isOwner(userId) && isValidTransaction(request.resource.data, userId);
         allow update: if false; // Transactions are immutable
+        allow delete: if isOwner(userId);
+      }
+
+      // Favorites Subcollection
+      match /favorites/{favoriteId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidFavorite(request.resource.data);
+        allow update: if isOwner(userId) && isValidFavorite(request.resource.data);
         allow delete: if isOwner(userId);
       }
     }

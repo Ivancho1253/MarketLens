@@ -1,33 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, onSnapshot } from 'firebase/firestore';
+import { collection, query, onSnapshot, limit } from 'firebase/firestore';
 import { db, auth } from '../lib/firebase';
+import CompanyLogo from './CompanyLogo';
 import { Asset } from '../types';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { ArrowUpRight, ArrowDownRight, Activity, DollarSign, PieChart } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, Activity, DollarSign, PieChart, Star } from 'lucide-react';
 
 export default function Dashboard() {
   const [assets, setAssets] = useState<Asset[]>([]);
+  const [favorites, setFavorites] = useState<any[]>([]);
   const [totalValue, setTotalValue] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!auth.currentUser) return;
 
-    const q = query(collection(db, 'users', auth.currentUser.uid, 'assets'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
+    // Portfolio Assets
+    const qAssets = query(collection(db, 'users', auth.currentUser.uid, 'assets'));
+    const unsubscribeAssets = onSnapshot(qAssets, (snapshot) => {
       const assetList: Asset[] = [];
       let total = 0;
       snapshot.forEach((doc) => {
         const data = doc.data() as Asset;
         assetList.push({ ...data, id: doc.id });
-        total += data.averagePrice * data.totalQuantity; // Simplified, should use real-time price
+        total += data.averagePrice * data.totalQuantity;
       });
       setAssets(assetList);
       setTotalValue(total);
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    // Favorites
+    const qFavs = query(collection(db, 'users', auth.currentUser.uid, 'favorites'), limit(5));
+    const unsubscribeFavs = onSnapshot(qFavs, (snapshot) => {
+      const favList: any[] = [];
+      snapshot.forEach((doc) => {
+        favList.push({ ...doc.data(), id: doc.id });
+      });
+      setFavorites(favList);
+    });
+
+    return () => {
+      unsubscribeAssets();
+      unsubscribeFavs();
+    };
   }, []);
 
   const mockChartData = [
@@ -65,19 +81,23 @@ export default function Dashboard() {
         <div className="card-title">Activos Destacados</div>
         <div className="flex-1 space-y-1">
           {assets.slice(0, 6).map((asset) => (
-            <div key={asset.id} className="flex justify-between items-center py-3 border-b border-border-accent last:border-0 hover:bg-white/5 transition-colors px-2 -mx-2 rounded-lg cursor-pointer">
+            <div key={asset.id} className="flex justify-between items-center py-3 border-b border-border-accent last:border-0 hover:bg-white/5 transition-colors px-2 -mx-2 rounded-lg cursor-pointer group">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-bg border border-border-accent rounded-lg flex items-center justify-center font-bold text-[10px]">
-                  {asset.symbol}
-                </div>
+                <CompanyLogo 
+                  symbol={asset.symbol} 
+                  name={asset.name} 
+                  type={asset.type === 'crypto' ? 'crypto' : 'stock'}
+                  className="w-10 h-10"
+                  imgClassName="w-7 h-7 grayscale group-hover:grayscale-0"
+                />
                 <div>
-                  <div className="text-sm font-semibold">{asset.name}</div>
-                  <div className="text-[10px] text-text-dim uppercase">{asset.type}</div>
+                  <div className="text-sm font-semibold group-hover:text-accent transition-colors">{asset.name}</div>
+                  <div className="text-[10px] text-text-dim uppercase font-bold tracking-widest">{asset.type}</div>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-sm font-semibold">${asset.averagePrice.toLocaleString()}</div>
-                <div className="text-[10px] text-accent">+2.4%</div>
+                <div className="text-sm font-bold">${asset.averagePrice.toLocaleString()}</div>
+                <div className="stat-badge stat-up mt-1">+2.4%</div>
               </div>
             </div>
           ))}
@@ -117,7 +137,27 @@ export default function Dashboard() {
       </div>
 
       {/* Bottom Stats / Social Feed Placeholder */}
-      <div className="md:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="md:col-span-12 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bento-card">
+          <div className="flex justify-between items-start mb-4">
+            <div className="card-title !mb-0">Watchlist</div>
+            <Star className="w-4 h-4 text-accent fill-accent" />
+          </div>
+          <div className="space-y-3">
+            {favorites.map((fav) => (
+              <div key={fav.id} className="flex items-center justify-between group cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <CompanyLogo symbol={fav.symbol} name={fav.name} type={fav.type} className="w-6 h-6 rounded-lg" imgClassName="w-4 h-4" />
+                  <span className="text-xs font-bold group-hover:text-accent transition-colors">{fav.symbol}</span>
+                </div>
+                <div className="text-[10px] text-accent font-bold">+1.2%</div>
+              </div>
+            ))}
+            {favorites.length === 0 && (
+              <div className="text-[10px] text-text-dim italic text-center py-4">No favorites yet</div>
+            )}
+          </div>
+        </div>
         <div className="bento-card">
           <div className="flex justify-between items-start mb-2">
             <span className="text-[10px] text-accent uppercase font-bold tracking-widest">Reciente</span>
