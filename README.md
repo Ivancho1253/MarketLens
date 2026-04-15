@@ -1,7 +1,12 @@
-MarketLens is a full-stack financial analysis platform that enables users to track and manage their investment portfolio across stocks and cryptocurrencies. It provides real-time market data, performance analytics (daily, weekly, monthly), and a personalized portfolio tracking system. Additionally, it integrates live news and social media feeds
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
+
 # Run and deploy your AI Studio app
 
 This contains everything you need to run your app locally.
+
+View your app in AI Studio: https://ai.studio/apps/dded2304-8d23-4a7f-9f9a-5c418ec4c2b3
 
 ## Run Locally
 

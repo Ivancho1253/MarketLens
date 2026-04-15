@@ -45,8 +45,8 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-[#E4E3E0]">
-        <div className="font-mono text-sm animate-pulse">INITIALIZING SYSTEM...</div>
+      <div className="flex h-screen items-center justify-center bg-bg">
+        <div className="text-accent text-xs uppercase tracking-[0.3em] animate-pulse font-bold">MARKETLENS INITIALIZING...</div>
       </div>
     );
   }

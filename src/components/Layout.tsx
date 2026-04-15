@@ -26,7 +26,7 @@ export default function Layout({ user, profile }: LayoutProps) {
       <aside className="w-60 border-r border-border-accent flex flex-col p-6 gap-8">
         <div className="flex items-center gap-2">
           <TrendingUp className="w-6 h-6 text-accent" />
-          <span className="font-bold tracking-tighter text-lg uppercase">NEXUS<span className="text-accent">PORTFOLIO</span></span>
+          <span className="font-bold tracking-tighter text-lg uppercase">MARKET<span className="text-accent">LENS</span></span>
         </div>
 
         <nav className="flex-1">

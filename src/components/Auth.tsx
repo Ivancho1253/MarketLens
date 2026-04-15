@@ -41,7 +41,7 @@ export default function Auth() {
               <TrendingUp className="w-8 h-8" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold tracking-tighter uppercase">NEXUS<span className="text-accent">FINANCE</span></h1>
+          <h1 className="text-3xl font-bold tracking-tighter uppercase">MARKET<span className="text-accent">LENS</span></h1>
           <p className="text-[10px] text-text-dim uppercase tracking-widest mt-2">Institutional Grade Portfolio Analysis</p>
         </div>
 
