@@ -163,13 +163,13 @@ export default function LandingPage() {
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   {[
-                    { label: 'Market Cap', val: '$2.4T' },
-                    { label: 'Volume', val: '$84B' },
-                    { label: 'Dominance', val: '42%' }
-                  ].map((item, i) => (
-                    <div key={i} className="p-4 bg-white/5 rounded-2xl border border-white/5">
-                      <div className="text-[8px] text-text-dim uppercase font-bold mb-1">{item.label}</div>
-                      <div className="text-sm font-black text-accent">{item.val}</div>
+                    { label: t('marketCap'), val: '$2.4T' },
+                    { label: t('volume'), val: '$84B' },
+                    { label: t('dominance'), val: '42%' }
+                  ].map((stat, i) => (
+                    <div key={i} className="bg-white/5 rounded-lg p-2 flex-1 border border-white/5">
+                      <div className="text-[8px] text-text-dim uppercase font-bold mb-1">{stat.label}</div>
+                      <div className="text-sm font-black text-accent">{stat.val}</div>
                     </div>
                   ))}
                 </div>
@@ -234,25 +234,25 @@ export default function LandingPage() {
               <div className="space-y-6 pt-12">
                 <div className="bento-card !bg-white/5 border-white/10 p-8 space-y-4 hover:border-accent/50 transition-all">
                   <BarChart3 className="w-8 h-8 text-accent" />
-                  <h3 className="font-black uppercase tracking-tight">Advanced Analytics</h3>
-                  <p className="text-xs text-text-dim leading-relaxed">Deep dive into market metrics with our proprietary analysis engine.</p>
+                  <h3 className="font-black uppercase tracking-tight">{t('advAnalyticsTitle')}</h3>
+                  <p className="text-xs text-text-dim leading-relaxed">{t('advAnalyticsDesc')}</p>
                 </div>
                 <div className="bento-card !bg-white/5 border-white/10 p-8 space-y-4 hover:border-accent/50 transition-all">
                   <Globe className="w-8 h-8 text-blue-400" />
-                  <h3 className="font-black uppercase tracking-tight">Global Coverage</h3>
-                  <p className="text-xs text-text-dim leading-relaxed">Track stocks, crypto, and prediction markets from around the world.</p>
+                  <h3 className="font-black uppercase tracking-tight">{t('globalCoverageTitle')}</h3>
+                  <p className="text-xs text-text-dim leading-relaxed">{t('globalCoverageDesc')}</p>
                 </div>
               </div>
               <div className="space-y-6">
                 <div className="bento-card !bg-white/5 border-white/10 p-8 space-y-4 hover:border-accent/50 transition-all">
                   <Cpu className="w-8 h-8 text-purple-400" />
-                  <h3 className="font-black uppercase tracking-tight">AI Insights</h3>
-                  <p className="text-xs text-text-dim leading-relaxed">Leverage machine learning to identify patterns before they happen.</p>
+                  <h3 className="font-black uppercase tracking-tight">{t('aiInsightsTitle')}</h3>
+                  <p className="text-xs text-text-dim leading-relaxed">{t('aiInsightsDesc')}</p>
                 </div>
                 <div className="bento-card !bg-white/5 border-white/10 p-8 space-y-4 hover:border-accent/50 transition-all">
                   <LineChart className="w-8 h-8 text-orange-400" />
-                  <h3 className="font-black uppercase tracking-tight">Real-time Data</h3>
-                  <p className="text-xs text-text-dim leading-relaxed">Millisecond precision data feeds for the most accurate market view.</p>
+                  <h3 className="font-black uppercase tracking-tight">{t('realtimeDataTitle')}</h3>
+                  <p className="text-xs text-text-dim leading-relaxed">{t('realtimeDataDesc')}</p>
                 </div>
               </div>
             </div>
@@ -261,14 +261,21 @@ export default function LandingPage() {
       </section>
 
       {/* Intelligence Section */}
-      <section id="intelligence" className="relative z-10 py-32 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20 space-y-4">
-            <div className="text-accent text-[10px] font-black uppercase tracking-[0.3em]">{t('intelligence')}</div>
+      <section id="intelligence" className="relative z-10 py-32 px-6 border-t border-white/5 overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/5 rounded-full blur-[120px]" />
+        
+        <div className="max-w-7xl mx-auto relative z-10 text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
             <h2 className="text-5xl font-black tracking-tighter uppercase">{t('predictiveInsights').split(' ')[0]} <span className="text-accent">{t('predictiveInsights').split(' ')[1]}</span></h2>
-            <p className="text-text-dim max-w-2xl mx-auto">Our AI engine processes millions of data points to give you an unfair advantage.</p>
-          </div>
-          
+            <p className="text-text-dim max-w-2xl mx-auto mt-4">{t('predictiveDesc')}</p>
+          </motion.div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { title: "Sentiment Analysis", desc: "Real-time social media and news sentiment tracking for every major asset." },

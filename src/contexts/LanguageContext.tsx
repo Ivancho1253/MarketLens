@@ -50,10 +50,75 @@ const translations: Translations = {
     en: 'Predictive Insights',
     pt: 'Insights Preditivos'
   },
+  predictiveDesc: {
+    es: 'Nuestro motor de inteligencia artificial procesa millones de puntos de datos para brindarte una ventaja injusta.',
+    en: 'Our AI engine processes millions of data points to give you an unfair advantage.',
+    pt: 'Nosso motor de IA processa milhões de pontos de dados para lhe dar uma vantagem injusta.'
+  },
   professionalExecution: {
     es: 'Ejecución Profesional',
     en: 'Professional Execution',
     pt: 'Execução Profissional'
+  },
+  marketCap: {
+    es: 'Capitalización',
+    en: 'Market Cap',
+    pt: 'Valor de Mercado'
+  },
+  volume: {
+    es: 'Volumen',
+    en: 'Volume',
+    pt: 'Volume'
+  },
+  dominance: {
+    es: 'Dominancia',
+    en: 'Dominance',
+    pt: 'Dominância'
+  },
+  dominateMarket: {
+    es: 'Todo lo que necesitas para dominar el mercado.',
+    en: 'Everything you need to dominate the market.',
+    pt: 'Tudo o que você precisa para dominar o mercado.'
+  },
+  advAnalyticsTitle: {
+    es: 'Análisis Avanzado',
+    en: 'Advanced Analytics',
+    pt: 'Análise Avançada'
+  },
+  advAnalyticsDesc: {
+    es: 'Profundiza en las métricas del mercado con nuestro motor de análisis propietario.',
+    en: 'Deep dive into market metrics with our proprietary analysis engine.',
+    pt: 'Mergulhe nas métricas do mercado com nosso motor de análise proprietário.'
+  },
+  globalCoverageTitle: {
+    es: 'Cobertura Global',
+    en: 'Global Coverage',
+    pt: 'Cobertura Global'
+  },
+  globalCoverageDesc: {
+    es: 'Rastrea acciones, criptomonedas y mercados de predicción de todo el mundo.',
+    en: 'Track stocks, crypto, and prediction markets from around the world.',
+    pt: 'Rastreie ações, criptomoedas e mercados de previsão de todo o mundo.'
+  },
+  aiInsightsTitle: {
+    es: 'Perspectivas IA',
+    en: 'AI Insights',
+    pt: 'Insights de IA'
+  },
+  aiInsightsDesc: {
+    es: 'Aprovecha el aprendizaje automático para identificar patrones antes de que ocurran.',
+    en: 'Leverage machine learning to identify patterns before they happen.',
+    pt: 'Aproveite o aprendizado de máquina para identificar padrões antes que aconteçam.'
+  },
+  realtimeDataTitle: {
+    es: 'Datos en Tiempo Real',
+    en: 'Real-time Data',
+    pt: 'Dados em Tempo Real'
+  },
+  realtimeDataDesc: {
+    es: 'Feeds de datos com precisión de milisegundos para la visión más precisa del mercado.',
+    en: 'Millisecond precision data feeds for the most accurate market view.',
+    pt: 'Feeds de dados com precisão de milissegundos para a visão de mercado mais precisa.'
   },
   // Auth
   backToLanding: {
