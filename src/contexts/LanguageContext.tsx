@@ -116,9 +116,54 @@ const translations: Translations = {
     pt: 'Dados em Tempo Real'
   },
   realtimeDataDesc: {
-    es: 'Feeds de datos com precisión de milisegundos para la visión más precisa del mercado.',
+    es: 'Feeds de datos con precisión de milisegundos para la visión más precisa del mercado.',
     en: 'Millisecond precision data feeds for the most accurate market view.',
     pt: 'Feeds de dados com precisão de milissegundos para a visão de mercado mais precisa.'
+  },
+  coreIntelligence: {
+    es: 'Inteligencia Central',
+    en: 'Core Intelligence',
+    pt: 'Inteligência Central'
+  },
+  dominateMarketText: {
+    es: 'Todo lo que necesitas para <span class="text-accent">dominar</span> el mercado.',
+    en: 'Everything you need to <span class="text-accent">dominate</span> the market.',
+    pt: 'Tudo o que você precisa para <span class="text-accent">dominar</span> o mercado.'
+  },
+  stopJuggling: {
+    es: 'Deja de hacer malabares con múltiples herramientas. MarketLens combina seguimiento de portafolio, análisis en tiempo real y ejecución en una interfaz fluida.',
+    en: 'Stop juggling multiple tools. MarketLens combines portfolio tracking, real-time analytics, and execution in one seamless interface.',
+    pt: 'Pare de fazer malabarismos com várias ferramentas. O MarketLens combina rastreamento de portfólio, análises em tempo real e execução em uma interface perfeita.'
+  },
+  smartWalletTrackingTitle: {
+    es: 'Seguimiento de Billetera Inteligente',
+    en: 'Smart Wallet Tracking',
+    pt: 'Rastreamento de Carteira Inteligente'
+  },
+  smartWalletTrackingDesc: {
+    es: 'Monitorea todos tus activos en múltiples cadenas e intercambios en tiempo real.',
+    en: 'Monitor all your assets across multiple chains and exchanges in real-time.',
+    pt: 'Monitore todos os seus ativos em várias cadeias e exchanges em tempo real.'
+  },
+  instantExecutionTitle: {
+    es: 'Ejecución Instantánea',
+    en: 'Instant Execution',
+    pt: 'Execução Instantânea'
+  },
+  instantExecutionDesc: {
+    es: 'Ejecuta operaciones con latencia mínima directamente desde tu terminal de análisis.',
+    en: 'Execute trades with minimal latency directly from your analysis terminal.',
+    pt: 'Execute negociações com latência mínima diretamente do seu terminal de análise.'
+  },
+  institutionalSecurityTitle: {
+    es: 'Seguridad Institucional',
+    en: 'Institutional Security',
+    pt: 'Segurança Institucional'
+  },
+  institutionalSecurityDesc: {
+    es: 'Tus datos están encriptados y protegidos por protocolos de seguridad líderes en la industria.',
+    en: 'Your data is encrypted and protected by industry-leading security protocols.',
+    pt: 'Seus dados são criptografados e protegidos por protocolos de segurança líderes do setor.'
   },
   // Auth
   backToLanding: {

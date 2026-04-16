@@ -41,6 +41,13 @@ export default function LandingPage() {
     },
   };
 
+  // Features for the landing page (moved out of JSX to avoid parser issues)
+  const landingFeatures = [
+    { icon: Wallet, title: t('smartWalletTrackingTitle'), desc: t('smartWalletTrackingDesc') },
+    { icon: Zap, title: t('instantExecutionTitle'), desc: t('instantExecutionDesc') },
+    { icon: Shield, title: t('institutionalSecurityTitle'), desc: t('institutionalSecurityDesc') }
+  ];
+
   return (
     <div className="min-h-screen bg-[#050505] text-white selection:bg-accent/30 selection:text-accent overflow-x-hidden">
       {/* Dynamic Background */}
@@ -65,8 +72,8 @@ export default function LandingPage() {
           />
           <span className="text-xl font-black tracking-tighter uppercase">Market<span className="text-accent">Lens</span></span>
         </div>
-        <div className="hidden md:flex items-center gap-8">
-          <div className="flex items-center gap-8 text-[10px] uppercase font-bold tracking-widest text-text-dim">
+        <div className="hidden md:flex items-center gap-10">
+          <div className="flex items-center gap-10 text-xs md:text-sm uppercase font-bold tracking-widest text-text-dim">
             <a href="#features" className="hover:text-accent transition-colors">{t('features')}</a>
             <a href="#intelligence" className="hover:text-accent transition-colors">{t('intelligence')}</a>
             <a href="#terminal" className="hover:text-accent transition-colors">{t('terminal')}</a>
@@ -130,7 +137,7 @@ export default function LandingPage() {
           className="mt-24 max-w-6xl mx-auto relative group"
         >
           <div className="absolute inset-0 bg-accent/20 blur-[100px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-          <div className="relative bg-[#0A0A0A] border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl">
+          <div className="relative bg-gradient-to-b from-[#061013] to-[#050505] border border-white/6 rounded-[2rem] overflow-hidden shadow-[0_30px_60px_-20px_rgba(0,0,0,0.75)] backdrop-blur-sm">
             <div className="flex items-center gap-2 px-6 py-4 border-b border-white/5 bg-white/5">
               <div className="flex gap-1.5">
                 <div className="w-3 h-3 rounded-full bg-red-500/50" />
@@ -141,52 +148,52 @@ export default function LandingPage() {
                 marketlens.app/terminal/dashboard
               </div>
             </div>
-            <div className="p-8 grid grid-cols-12 gap-6">
-              <div className="col-span-8 space-y-6">
-                <div className="h-64 bg-white/5 rounded-2xl border border-white/5 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-accent/10 to-transparent" />
+            <div className="p-6 sm:p-8 grid grid-cols-12 gap-4 sm:gap-6">
+              <div className="col-span-12 md:col-span-8 space-y-6">
+                <div className="h-64 bg-gradient-to-t from-[#062018]/40 to-transparent rounded-2xl border border-white/6 relative overflow-hidden shadow-inner">
+                  <div className="absolute inset-0 bg-gradient-to-t from-accent/20 to-transparent" />
                   <div className="absolute top-4 left-4 flex gap-2">
                     <div className="px-2 py-1 rounded bg-accent/20 text-[8px] font-bold text-accent uppercase">Live Feed</div>
                     <div className="px-2 py-1 rounded bg-white/5 text-[8px] font-bold text-text-dim uppercase">Volatility: High</div>
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 h-1/2 flex items-end px-4 pb-4 gap-2">
+                  <div className="absolute bottom-0 left-0 right-0 h-1/2 flex items-end px-4 pb-4 gap-3">
                     {[40, 70, 45, 90, 65, 80, 55, 75, 95, 60, 85, 50, 65, 40].map((h, i) => (
                       <motion.div 
                         key={i} 
                         initial={{ height: 0 }}
                         animate={{ height: `${h}%` }}
                         transition={{ delay: 1 + (i * 0.05), duration: 0.5 }}
-                        className="flex-1 bg-accent/30 rounded-t-sm" 
+                        className="flex-1 bg-accent/60 rounded-t-lg transition-all" 
                       />
                     ))}
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                   {[
                     { label: t('marketCap'), val: '$2.4T' },
                     { label: t('volume'), val: '$84B' },
                     { label: t('dominance'), val: '42%' }
                   ].map((stat, i) => (
-                    <div key={i} className="bg-white/5 rounded-lg p-2 flex-1 border border-white/5">
-                      <div className="text-[8px] text-text-dim uppercase font-bold mb-1">{stat.label}</div>
-                      <div className="text-sm font-black text-accent">{stat.val}</div>
+                    <div key={i} className="bg-gradient-to-br from-[#07110a] to-[#041010] rounded-lg p-4 flex-1 border border-white/6 shadow-md">
+                      <div className="text-[9px] text-text-dim uppercase font-bold mb-1">{stat.label}</div>
+                      <div className="text-xl md:text-2xl font-black text-accent">{stat.val}</div>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="col-span-4 space-y-4">
+              <div className="col-span-12 md:col-span-4 space-y-4">
                 {[
                   { name: 'BTC/USD', price: '64,231', change: '+2.4%' },
                   { name: 'ETH/USD', price: '3,452', change: '+1.8%' },
                   { name: 'SOL/USD', price: '142.5', change: '-0.5%' },
                   { name: 'AAPL', price: '182.4', change: '+0.2%' }
                 ].map((asset, i) => (
-                  <div key={i} className="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center">
+                  <div key={i} className="p-4 bg-gradient-to-br from-[#070707] to-[#050506] rounded-2xl border border-white/6 flex justify-between items-center shadow">
                     <div>
-                      <div className="text-[10px] font-black">{asset.name}</div>
-                      <div className="text-[8px] text-text-dim">{asset.price}</div>
+                      <div className="text-[11px] font-black">{asset.name}</div>
+                      <div className="text-[9px] text-text-dim">{asset.price}</div>
                     </div>
-                    <div className={`text-[8px] font-bold ${asset.change.startsWith('+') ? 'text-accent' : 'text-loss'}`}>
+                    <div className={`text-[10px] font-bold ${asset.change.startsWith('+') ? 'text-accent' : 'text-loss'}`}>
                       {asset.change}
                     </div>
                   </div>
@@ -200,33 +207,32 @@ export default function LandingPage() {
       {/* Value Section */}
       <section id="features" className="relative z-10 py-32 px-6 bg-white/[0.02]">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
-              <div className="text-accent text-[10px] font-black uppercase tracking-[0.3em]">Core Intelligence</div>
-              <h2 className="text-5xl font-black tracking-tighter uppercase leading-[0.9]">
-                Everything you need to <span className="text-accent">dominate</span> the market.
-              </h2>
+              <div className="text-accent text-[10px] font-black uppercase tracking-[0.3em]">{t('coreIntelligence')}</div>
+              <h2 
+                className="text-5xl font-black tracking-tighter uppercase leading-[0.9]"
+                dangerouslySetInnerHTML={{ __html: t('dominateMarketText') }}
+              />
               <p className="text-text-dim text-lg font-medium leading-relaxed">
-                Stop juggling multiple tools. MarketLens combines portfolio tracking, 
-                real-time analytics, and execution in one seamless interface.
+                {t('stopJuggling')}
               </p>
               
               <div className="space-y-6">
-                {[
-                  { icon: Wallet, title: "Smart Wallet Tracking", desc: "Monitor all your assets across multiple chains and exchanges in real-time." },
-                  { icon: Zap, title: "Instant Execution", desc: "Execute trades with minimal latency directly from your analysis terminal." },
-                  { icon: Shield, title: "Institutional Security", desc: "Your data is encrypted and protected by industry-leading security protocols." }
-                ].map((feature, i) => (
-                  <div key={i} className="flex gap-6 group">
-                    <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-bg transition-all duration-500">
-                      <feature.icon className="w-6 h-6" />
+                {landingFeatures.map((feature, i) => {
+                  const Icon = feature.icon;
+                  return (
+                    <div key={i} className="flex gap-6 group">
+                      <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-bg transition-all duration-500">
+                        <Icon className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 className="font-black uppercase tracking-tight mb-1">{feature.title}</h4>
+                        <p className="text-sm text-text-dim leading-relaxed">{feature.desc}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-black uppercase tracking-tight mb-1">{feature.title}</h4>
-                      <p className="text-sm text-text-dim leading-relaxed">{feature.desc}</p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
             
@@ -297,10 +303,10 @@ export default function LandingPage() {
       {/* Terminal Section */}
       <section id="terminal" className="relative z-10 py-32 px-6 bg-white/[0.02]">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            <div className="order-2 lg:order-1 relative">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="order-2 lg:order-1 relative">
               <div className="absolute inset-0 bg-accent/20 blur-[100px] rounded-full" />
-              <div className="relative bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 shadow-2xl">
+              <div className="relative bg-gradient-to-b from-[#061013] to-[#050505] border border-white/6 rounded-3xl p-8 shadow-2xl backdrop-blur-md">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center border-b border-white/5 pb-4">
                     <div className="text-[10px] font-black uppercase">{t('terminal')}</div>
@@ -313,7 +319,7 @@ export default function LandingPage() {
                         <span className="text-text-dim">0.452 BTC</span>
                       </div>
                     ))}
-                    <div className="py-2 text-center text-xs font-black border-y border-white/5 my-2">64,230.50</div>
+                    <div className="py-3 text-center text-lg md:text-xl font-black border-y border-white/6 my-2 bg-white/2 rounded-full text-bg">64,230.50</div>
                     {[...Array(8)].map((_, i) => (
                       <div key={i} className="flex justify-between text-[9px] font-mono">
                         <span className="text-accent">64,229.{i}</span>
