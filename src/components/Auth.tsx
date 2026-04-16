@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../lib/firebase';
 import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
@@ -48,29 +49,32 @@ export default function Auth() {
         <LanguageSelector />
       </div>
 
-      <div className="w-full max-w-md relative z-10">
+  <div className="w-full max-w-md relative z-10 pt-12">
+        {/* Prominent back pill */}
         <button 
           onClick={() => navigate('/')}
-          className="absolute -top-16 left-0 flex items-center gap-2 text-[10px] uppercase font-bold tracking-widest text-text-dim hover:text-accent transition-colors group"
+          className="absolute top-6 left-6 flex items-center gap-3 text-sm uppercase font-bold tracking-widest text-text-dim hover:text-accent transition-colors bg-white/3 hover:bg-white/5 px-3 py-2 rounded-full shadow-md backdrop-blur-sm"
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft className="w-5 h-5" />
           {t('backToLanding')}
         </button>
 
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <img 
+        <div className="text-center mb-6">
+          <div className="flex justify-center mb-2">
+            <motion.img 
               src="/logo.png" 
               alt="MarketLens Logo" 
-              className="w-16 h-16 object-contain drop-shadow-[0_0_10px_rgba(0,255,136,0.3)]" 
-              referrerPolicy="no-referrer" 
+              className="w-20 h-20 object-contain drop-shadow-[0_0_14px_rgba(0,255,136,0.35)]" 
+              referrerPolicy="no-referrer"
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: 'spring', stiffness: 200 }}
             />
           </div>
           <h1 className="text-3xl font-black tracking-tighter uppercase">MARKET<span className="text-accent">LENS</span></h1>
           <p className="text-[10px] text-text-dim uppercase tracking-widest mt-2 font-bold">Institutional Grade Portfolio Analysis</p>
         </div>
 
-        <div className="bento-card !bg-white/5 border-white/10 backdrop-blur-xl">
+        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="bento-card !bg-white/5 border-white/10 backdrop-blur-xl">
           <h2 className="text-xs font-black uppercase mb-8 border-b border-white/5 pb-4 tracking-widest">
             {isLogin ? t('systemAccess') : t('createAccount')}
           </h2>
@@ -107,7 +111,7 @@ export default function Auth() {
 
             <button
               type="submit"
-              className="w-full bg-accent text-bg py-4 rounded-xl text-xs uppercase font-black tracking-widest hover:opacity-90 transition-all shadow-[0_10px_20px_-5px_rgba(0,255,136,0.3)]"
+              className="w-full bg-gradient-to-r from-accent to-green-500 text-bg py-4 rounded-xl text-sm uppercase font-black tracking-widest hover:scale-[1.01] active:scale-95 transition-all shadow-[0_14px_30px_-10px_rgba(0,255,136,0.28)]"
             >
               {isLogin ? t('signIn') : t('register')}
             </button>
@@ -124,10 +128,10 @@ export default function Auth() {
 
           <button
             onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 py-4 rounded-xl text-xs uppercase font-black tracking-widest hover:bg-white hover:text-bg transition-all"
+            className="w-full flex items-center justify-center gap-3 bg-[#0b0b0b] border border-white/6 py-4 rounded-xl text-sm uppercase font-black tracking-widest hover:scale-105 transition-transform shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)]"
           >
-            <img src="https://www.google.com/favicon.ico" className="w-4 h-4" alt="Google" referrerPolicy="no-referrer" />
-            Google Account
+            <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" referrerPolicy="no-referrer" />
+            <span className="ml-2">Google Account</span>
           </button>
 
           <p className="mt-10 text-center text-[10px] text-text-dim uppercase font-bold tracking-widest">
@@ -139,7 +143,7 @@ export default function Auth() {
               {isLogin ? t('registerNow') : t('signInNow')}
             </button>
           </p>
-        </div>
+        </motion.div>
 
         <div className="mt-12 flex items-center justify-center gap-2 opacity-20">
           <ShieldCheck className="w-4 h-4" />

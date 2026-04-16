@@ -305,9 +305,9 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: "Sentiment Analysis", desc: "Real-time social media and news sentiment tracking for every major asset." },
-              { title: "Whale Alerts", desc: "Track large institutional movements before they impact the order book." },
-              { title: "Pattern Recognition", desc: "Automated identification of complex technical patterns across all timeframes." }
+              { title: t('sentimentTitle'), desc: t('sentimentDesc') },
+              { title: t('whaleAlertsTitle'), desc: t('whaleAlertsDesc') },
+              { title: t('patternRecognitionTitle'), desc: t('patternRecognitionDesc') }
             ].map((item, i) => (
               <div key={i} className="bento-card group hover:border-accent/30 transition-all">
                 <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent mb-6 group-hover:scale-110 transition-transform">

@@ -110,6 +110,37 @@ const translations: Translations = {
     en: 'Leverage machine learning to identify patterns before they happen.',
     pt: 'Aproveite o aprendizado de máquina para identificar padrões antes que aconteçam.'
   },
+    // Intelligence items (translate)
+    sentimentTitle: {
+      es: 'Análisis de Sentimiento',
+      en: 'Sentiment Analysis',
+      pt: 'Análise de Sentimento'
+    },
+    sentimentDesc: {
+      es: 'Seguimiento en tiempo real del sentimiento en redes sociales y noticias para cada activo importante.',
+      en: 'Real-time social media and news sentiment tracking for every major asset.',
+      pt: 'Rastreamento em tempo real de sentimento em redes sociais e notícias para cada ativo importante.'
+    },
+    whaleAlertsTitle: {
+      es: 'Alertas de Ballenas',
+      en: 'Whale Alerts',
+      pt: 'Alertas de Baleias'
+    },
+    whaleAlertsDesc: {
+      es: 'Rastrea grandes movimientos institucionales antes de que impacten el libro de órdenes.',
+      en: 'Track large institutional movements before they impact the order book.',
+      pt: 'Rastreie grandes movimentos institucionais antes que impactem o livro de ordens.'
+    },
+    patternRecognitionTitle: {
+      es: 'Reconocimiento de Patrones',
+      en: 'Pattern Recognition',
+      pt: 'Reconhecimento de Padrões'
+    },
+    patternRecognitionDesc: {
+      es: 'Identificación automatizada de patrones técnicos complejos en todos los marcos temporales.',
+      en: 'Automated identification of complex technical patterns across all timeframes.',
+      pt: 'Identificação automatizada de padrões técnicos complexos em todos os intervalos de tempo.'
+    },
   realtimeDataTitle: {
     es: 'Datos en Tiempo Real',
     en: 'Real-time Data',
