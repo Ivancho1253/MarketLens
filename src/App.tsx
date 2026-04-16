@@ -51,7 +51,7 @@ export default function App() {
     return (
       <div className="flex flex-col h-screen items-center justify-center bg-bg gap-6">
         <img 
-          src="https://chatgpt.com/backend-api/estuary/content?id=file_00000000ae1871f5a8f925de14542cf8&ts=493413&p=fs&cid=1&sig=544363e48ba03522eb389bda4b571cef7a8914e5f4ed2e5fbff1756e14c09479&v=0" 
+          src="/logo.png" 
           alt="MarketLens Logo" 
           className="w-20 h-20 object-contain animate-pulse" 
           referrerPolicy="no-referrer" 

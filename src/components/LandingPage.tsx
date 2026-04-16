@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Shield, 
-  Zap, 
-  BarChart3, 
-  Wallet, 
-  ArrowRight, 
-  Globe, 
-  Cpu, 
+import {
+  Shield,
+  Zap,
+  BarChart3,
+  Wallet,
+  ArrowRight,
+  Globe,
+  Cpu,
   LineChart,
   ChevronRight,
   Activity
@@ -37,26 +37,50 @@ export default function LandingPage() {
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.5, ease: "easeOut" },
+      transition: { duration: 0.5, ease: 'easeOut' },
     },
   };
 
-  // Features for the landing page (moved out of JSX to avoid parser issues)
   const landingFeatures = [
     { icon: Wallet, title: t('smartWalletTrackingTitle'), desc: t('smartWalletTrackingDesc') },
     { icon: Zap, title: t('instantExecutionTitle'), desc: t('instantExecutionDesc') },
     { icon: Shield, title: t('institutionalSecurityTitle'), desc: t('institutionalSecurityDesc') }
   ];
 
+  const [tiltHero, setTiltHero] = useState({ x: 0, y: 0 });
+  const [tiltTerminal, setTiltTerminal] = useState({ x: 0, y: 0 });
+  const heroRef = useRef<HTMLDivElement | null>(null);
+  const terminalRef = useRef<HTMLDivElement | null>(null);
+
+  // Parallax on scroll for subtle background motion
+  const [scrollY, setScrollY] = useState(0);
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY || window.pageYOffset || 0);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const handleTilt = (e: React.MouseEvent, ref: React.RefObject<HTMLDivElement>, setter: (v: { x: number; y: number }) => void) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const x = e.clientX - (rect.left + rect.width / 2);
+    const y = e.clientY - (rect.top + rect.height / 2);
+    const rotateY = (x / rect.width) * 8; // degrees
+    const rotateX = -(y / rect.height) * 8;
+    setter({ x: rotateX, y: rotateY });
+  };
+
+  const resetTilt = (setter: (v: { x: number; y: number }) => void) => {
+    setter({ x: 0, y: 0 });
+  };
+
   return (
     <div className="min-h-screen bg-[#050505] text-white selection:bg-accent/30 selection:text-accent overflow-x-hidden">
       {/* Dynamic Background */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-accent/10 blur-[120px] rounded-full animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-purple-500/5 blur-[100px] rounded-full" />
-        
-        {/* Grid Pattern */}
+  <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-accent/10 blur-[120px] rounded-full animate-pulse" style={{ transform: `translateY(${scrollY * 0.06}px) scale(${1 + Math.sin(scrollY * 0.001) * 0.02})`, transition: 'transform 0.35s ease-out' }} />
+  <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s', transform: `translateY(${scrollY * -0.05}px) scale(${1 + Math.cos(scrollY * 0.001) * 0.02})`, transition: 'transform 0.35s ease-out' }} />
+  <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-purple-500/5 blur-[100px] rounded-full" style={{ transform: `translateY(${scrollY * 0.08}px) scale(${1 + Math.sin(scrollY * 0.0015) * 0.025})`, transition: 'transform 0.35s ease-out' }} />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
         <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
       </div>
@@ -64,12 +88,7 @@ export default function LandingPage() {
       {/* Navigation */}
       <nav className="relative z-50 flex items-center justify-between px-6 py-6 max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
-          <img 
-            src="/logo.png" 
-            alt="MarketLens Logo" 
-            className="w-10 h-10 object-contain" 
-            referrerPolicy="no-referrer" 
-          />
+          <img src="/logo.png" alt="MarketLens Logo" className="w-10 h-10 object-contain" referrerPolicy="no-referrer" />
           <span className="text-xl font-black tracking-tighter uppercase">Market<span className="text-accent">Lens</span></span>
         </div>
         <div className="hidden md:flex items-center gap-10">
@@ -80,10 +99,7 @@ export default function LandingPage() {
           </div>
           <LanguageSelector />
         </div>
-        <button 
-          onClick={() => navigate('/auth')}
-          className="px-6 py-2.5 bg-white/5 border border-white/10 rounded-xl text-[10px] uppercase font-bold tracking-widest hover:bg-white hover:text-black transition-all"
-        >
+        <button onClick={() => navigate('/auth')} className="px-6 py-2.5 bg-white/5 border border-white/10 rounded-xl text-[10px] uppercase font-bold tracking-widest hover:bg-white hover:text-black transition-all">
           {t('launchApp')}
         </button>
       </nav>
@@ -91,35 +107,27 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="relative z-10 pt-20 pb-32 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto text-center">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="space-y-8"
-          >
+          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-8">
             <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] uppercase font-black tracking-[0.2em]">
               <Activity className="w-3 h-3 animate-pulse" />
               Next-Gen Market Intelligence
             </motion.div>
-            
+
             <motion.h1 variants={itemVariants} className="text-6xl md:text-8xl font-black tracking-tighter uppercase leading-[0.9]">
-              {t('heroTitle').split('.').map((part, i, arr) => (
+              {t('heroTitle').split('.').map((part, i) => (
                 <React.Fragment key={i}>
                   {i === 0 ? part + '.' : <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-blue-400 to-purple-500">{part}</span>}
                   {i === 0 && <br />}
                 </React.Fragment>
               ))}
             </motion.h1>
-            
+
             <motion.p variants={itemVariants} className="max-w-2xl mx-auto text-text-dim text-lg md:text-xl font-medium leading-relaxed">
               {t('heroSub')}
             </motion.p>
-            
+
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-              <button 
-                onClick={() => navigate('/auth')}
-                className="group relative px-10 py-5 bg-accent text-bg rounded-2xl text-sm uppercase font-black tracking-widest overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_20px_40px_-10px_rgba(0,255,136,0.3)]"
-              >
+              <button onClick={() => navigate('/auth')} className="group relative px-10 py-5 bg-accent text-bg rounded-2xl text-sm uppercase font-black tracking-widest overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_20px_40px_-10px_rgba(0,255,136,0.3)]">
                 <span className="relative z-10 flex items-center gap-2">
                   {t('getStarted')} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </span>
@@ -129,79 +137,100 @@ export default function LandingPage() {
           </motion.div>
         </div>
 
-        {/* Hero Visual */}
-        <motion.div 
-          initial={{ opacity: 0, y: 100 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 1 }}
-          className="mt-24 max-w-6xl mx-auto relative group"
-        >
-          <div className="absolute inset-0 bg-accent/20 blur-[100px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-          <div className="relative bg-gradient-to-b from-[#061013] to-[#050505] border border-white/6 rounded-[2rem] overflow-hidden shadow-[0_30px_60px_-20px_rgba(0,0,0,0.75)] backdrop-blur-sm">
-            <div className="flex items-center gap-2 px-6 py-4 border-b border-white/5 bg-white/5">
-              <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-red-500/50" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
-                <div className="w-3 h-3 rounded-full bg-green-500/50" />
+        {/* Hero Visual (simplified & balanced) */}
+        <div className="mt-24 max-w-6xl mx-auto relative group">
+          <div
+            ref={heroRef}
+            onMouseMove={(e) => handleTilt(e, heroRef, setTiltHero)}
+            onMouseLeave={() => resetTilt(setTiltHero)}
+            style={{ transform: `perspective(1000px) rotateX(${tiltHero.x}deg) rotateY(${tiltHero.y}deg)` }}
+            className="transform-gpu"
+          >
+            <div className="absolute inset-0 bg-accent/20 blur-[100px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+
+            <motion.div className="relative bg-gradient-to-b from-[#061013] to-[#050505] border border-white/6 rounded-[2rem] overflow-hidden shadow-[0_30px_60px_-20px_rgba(0,0,0,0.75)] backdrop-blur-sm" animate={{ y: [0, -6, 0] }} transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}>
+              <div className="flex items-center gap-2 px-6 py-4 border-b border-white/5 bg-white/5">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-red-500/50" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
+                  <div className="w-3 h-3 rounded-full bg-green-500/50" />
+                </div>
+                <div className="ml-4 px-4 py-1 rounded-lg bg-white/5 border border-white/5 text-[10px] font-mono text-text-dim">
+                  marketlens.app/terminal/dashboard
+                </div>
               </div>
-              <div className="ml-4 px-4 py-1 rounded-lg bg-white/5 border border-white/5 text-[10px] font-mono text-text-dim">
-                marketlens.app/terminal/dashboard
-              </div>
-            </div>
-            <div className="p-6 sm:p-8 grid grid-cols-12 gap-4 sm:gap-6">
-              <div className="col-span-12 md:col-span-8 space-y-6">
-                <div className="h-64 bg-gradient-to-t from-[#062018]/40 to-transparent rounded-2xl border border-white/6 relative overflow-hidden shadow-inner">
-                  <div className="absolute inset-0 bg-gradient-to-t from-accent/20 to-transparent" />
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    <div className="px-2 py-1 rounded bg-accent/20 text-[8px] font-bold text-accent uppercase">Live Feed</div>
-                    <div className="px-2 py-1 rounded bg-white/5 text-[8px] font-bold text-text-dim uppercase">Volatility: High</div>
+
+              <div className="p-6 sm:p-8 grid grid-cols-12 gap-4 sm:gap-6">
+                <div className="col-span-12 md:col-span-8 space-y-6">
+                  <div className="h-64 bg-gradient-to-t from-[#062018]/40 to-transparent rounded-2xl border border-white/6 relative overflow-hidden shadow-inner">
+                    <div className="absolute inset-0 bg-gradient-to-t from-accent/20 to-transparent" />
+
+                    <motion.div initial={{ opacity: 0, y: 20, rotate: -6 }} whileInView={{ opacity: 1, y: 0, rotate: -2 }} whileHover={{ y: -8, rotate: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="absolute top-6 right-6 w-44 md:w-56 p-3 rounded-xl bg-[#071013] border border-white/6 shadow-lg">
+                      <div className="text-[10px] text-text-dim uppercase font-bold mb-2">AI Insights</div>
+                      <div className="text-sm font-black">Pattern signal • +82%</div>
+                    </motion.div>
+
+                    <motion.div
+                      initial={{ opacity: 0, y: 30, rotate: 6 }}
+                      whileInView={{ opacity: 1, y: 0, rotate: 2 }}
+                      whileHover={{ y: -6, rotate: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.9 }}
+                      className="absolute top-6 left-6 w-36 md:w-48 p-3 rounded-xl bg-[#081018] border border-white/6 shadow-lg"
+                      style={{ transform: `translateY(${scrollY * 0.02}px)` }}
+                    >
+                      <div className="text-[10px] text-text-dim uppercase font-bold mb-1">Live Orders</div>
+                      <div className="text-sm font-black">2.4k trades/s</div>
+                    </motion.div>
+
+                    <div className="absolute top-4 left-4 flex gap-2">
+                      <div className="px-2 py-1 rounded bg-accent/20 text-[8px] font-bold text-accent uppercase">Live Feed</div>
+                      <div className="px-2 py-1 rounded bg-white/5 text-[8px] font-bold text-text-dim uppercase">Volatility: High</div>
+                    </div>
+
+                    <div className="absolute bottom-0 left-0 right-0 h-1/2 flex items-end px-4 pb-4 gap-3">
+                      {[40, 70, 45, 90, 65, 80, 55, 75, 95, 60, 85, 50, 65, 40].map((h, i) => (
+                        <motion.div key={i} initial={{ height: 0 }} animate={{ height: `${h}%` }} transition={{ delay: 1 + (i * 0.05), duration: 0.5 }} className="flex-1 bg-accent/60 rounded-t-lg transition-all" />
+                      ))}
+                    </div>
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 h-1/2 flex items-end px-4 pb-4 gap-3">
-                    {[40, 70, 45, 90, 65, 80, 55, 75, 95, 60, 85, 50, 65, 40].map((h, i) => (
-                      <motion.div 
-                        key={i} 
-                        initial={{ height: 0 }}
-                        animate={{ height: `${h}%` }}
-                        transition={{ delay: 1 + (i * 0.05), duration: 0.5 }}
-                        className="flex-1 bg-accent/60 rounded-t-lg transition-all" 
-                      />
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                    {[
+                      { label: t('marketCap'), val: '$2.4T' },
+                      { label: t('volume'), val: '$84B' },
+                      { label: t('dominance'), val: '42%' }
+                    ].map((stat, i) => (
+                      <div key={i} className="bg-gradient-to-br from-[#07110a] to-[#041010] rounded-lg p-4 flex-1 border border-white/6 shadow-md">
+                        <div className="text-[9px] text-text-dim uppercase font-bold mb-1">{stat.label}</div>
+                        <div className="text-xl md:text-2xl font-black text-accent">{stat.val}</div>
+                      </div>
                     ))}
                   </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+
+                <div className="col-span-12 md:col-span-4 space-y-4">
                   {[
-                    { label: t('marketCap'), val: '$2.4T' },
-                    { label: t('volume'), val: '$84B' },
-                    { label: t('dominance'), val: '42%' }
-                  ].map((stat, i) => (
-                    <div key={i} className="bg-gradient-to-br from-[#07110a] to-[#041010] rounded-lg p-4 flex-1 border border-white/6 shadow-md">
-                      <div className="text-[9px] text-text-dim uppercase font-bold mb-1">{stat.label}</div>
-                      <div className="text-xl md:text-2xl font-black text-accent">{stat.val}</div>
+                    { name: 'BTC/USD', price: '64,231', change: '+2.4%' },
+                    { name: 'ETH/USD', price: '3,452', change: '+1.8%' },
+                    { name: 'SOL/USD', price: '142.5', change: '-0.5%' },
+                    { name: 'AAPL', price: '182.4', change: '+0.2%' }
+                  ].map((asset, i) => (
+                    <div key={i} className="p-4 bg-gradient-to-br from-[#070707] to-[#050506] rounded-2xl border border-white/6 flex justify-between items-center shadow">
+                      <div>
+                        <div className="text-[11px] font-black">{asset.name}</div>
+                        <div className="text-[9px] text-text-dim">{asset.price}</div>
+                      </div>
+                      <div className={`text-[10px] font-bold ${asset.change.startsWith('+') ? 'text-accent' : 'text-loss'}`}>
+                        {asset.change}
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="col-span-12 md:col-span-4 space-y-4">
-                {[
-                  { name: 'BTC/USD', price: '64,231', change: '+2.4%' },
-                  { name: 'ETH/USD', price: '3,452', change: '+1.8%' },
-                  { name: 'SOL/USD', price: '142.5', change: '-0.5%' },
-                  { name: 'AAPL', price: '182.4', change: '+0.2%' }
-                ].map((asset, i) => (
-                  <div key={i} className="p-4 bg-gradient-to-br from-[#070707] to-[#050506] rounded-2xl border border-white/6 flex justify-between items-center shadow">
-                    <div>
-                      <div className="text-[11px] font-black">{asset.name}</div>
-                      <div className="text-[9px] text-text-dim">{asset.price}</div>
-                    </div>
-                    <div className={`text-[10px] font-bold ${asset.change.startsWith('+') ? 'text-accent' : 'text-loss'}`}>
-                      {asset.change}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            </motion.div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Value Section */}
@@ -210,14 +239,9 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <div className="text-accent text-[10px] font-black uppercase tracking-[0.3em]">{t('coreIntelligence')}</div>
-              <h2 
-                className="text-5xl font-black tracking-tighter uppercase leading-[0.9]"
-                dangerouslySetInnerHTML={{ __html: t('dominateMarketText') }}
-              />
-              <p className="text-text-dim text-lg font-medium leading-relaxed">
-                {t('stopJuggling')}
-              </p>
-              
+              <h2 className="text-5xl font-black tracking-tighter uppercase leading-[0.9]" dangerouslySetInnerHTML={{ __html: t('dominateMarketText') }} />
+              <p className="text-text-dim text-lg font-medium leading-relaxed">{t('stopJuggling')}</p>
+
               <div className="space-y-6">
                 {landingFeatures.map((feature, i) => {
                   const Icon = feature.icon;
@@ -235,7 +259,7 @@ export default function LandingPage() {
                 })}
               </div>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-6 pt-12">
                 <div className="bento-card !bg-white/5 border-white/10 p-8 space-y-4 hover:border-accent/50 transition-all">
@@ -249,6 +273,7 @@ export default function LandingPage() {
                   <p className="text-xs text-text-dim leading-relaxed">{t('globalCoverageDesc')}</p>
                 </div>
               </div>
+
               <div className="space-y-6">
                 <div className="bento-card !bg-white/5 border-white/10 p-8 space-y-4 hover:border-accent/50 transition-all">
                   <Cpu className="w-8 h-8 text-purple-400" />
@@ -269,18 +294,14 @@ export default function LandingPage() {
       {/* Intelligence Section */}
       <section id="intelligence" className="relative z-10 py-32 px-6 border-t border-white/5 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/5 rounded-full blur-[120px]" />
-        
+
         <div className="max-w-7xl mx-auto relative z-10 text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-5xl font-black tracking-tighter uppercase">{t('predictiveInsights').split(' ')[0]} <span className="text-accent">{t('predictiveInsights').split(' ')[1]}</span></h2>
             <p className="text-text-dim max-w-2xl mx-auto mt-4">{t('predictiveDesc')}</p>
           </motion.div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -303,10 +324,17 @@ export default function LandingPage() {
       {/* Terminal Section */}
       <section id="terminal" className="relative z-10 py-32 px-6 bg-white/[0.02]">
         <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="order-2 lg:order-1 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="order-2 lg:order-1 relative">
               <div className="absolute inset-0 bg-accent/20 blur-[100px] rounded-full" />
-              <div className="relative bg-gradient-to-b from-[#061013] to-[#050505] border border-white/6 rounded-3xl p-8 shadow-2xl backdrop-blur-md">
+
+              <div
+                ref={terminalRef}
+                onMouseMove={(e) => handleTilt(e, terminalRef, setTiltTerminal)}
+                onMouseLeave={() => resetTilt(setTiltTerminal)}
+                style={{ transform: `perspective(800px) rotateX(${tiltTerminal.x}deg) rotateY(${tiltTerminal.y}deg)` }}
+                className="relative bg-gradient-to-b from-[#061013] to-[#050505] border border-white/6 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md transform-gpu"
+              >
                 <div className="space-y-4">
                   <div className="flex justify-between items-center border-b border-white/5 pb-4">
                     <div className="text-[10px] font-black uppercase">{t('terminal')}</div>
@@ -319,7 +347,9 @@ export default function LandingPage() {
                         <span className="text-text-dim">0.452 BTC</span>
                       </div>
                     ))}
-                    <div className="py-3 text-center text-lg md:text-xl font-black border-y border-white/6 my-2 bg-white/2 rounded-full text-bg">64,230.50</div>
+
+                    <motion.div className="py-2 text-center text-xl md:text-2xl font-extrabold my-2 rounded-full bg-accent text-bg shadow-[0_8px_24px_-8px_rgba(0,255,136,0.18)]" animate={{ scale: [1, 1.02, 1] }} transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}>64,230.50</motion.div>
+
                     {[...Array(8)].map((_, i) => (
                       <div key={i} className="flex justify-between text-[9px] font-mono">
                         <span className="text-accent">64,229.{i}</span>
@@ -330,14 +360,11 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
+
             <div className="order-1 lg:order-2 space-y-8">
               <div className="text-accent text-[10px] font-black uppercase tracking-[0.3em]">{t('terminal')}</div>
-              <h2 className="text-5xl font-black tracking-tighter uppercase leading-[0.9]">
-                {t('professionalExecution').split(' ')[0]} <span className="text-accent">{t('professionalExecution').split(' ')[1]}</span>
-              </h2>
-              <p className="text-text-dim text-lg font-medium leading-relaxed">
-                A high-performance trading interface designed for speed. Low-latency order execution and deep liquidity integration.
-              </p>
+              <h2 className="text-5xl font-black tracking-tighter uppercase leading-[0.9]">{t('professionalExecution').split(' ')[0]} <span className="text-accent">{t('professionalExecution').split(' ')[1]}</span></h2>
+              <p className="text-text-dim text-lg font-medium leading-relaxed">A high-performance trading interface designed for speed. Low-latency order execution and deep liquidity integration.</p>
               <ul className="space-y-4">
                 {['Direct Market Access', 'Advanced Order Types', 'Multi-Exchange Routing', 'Custom Workspace Layouts'].map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest">
@@ -354,20 +381,11 @@ export default function LandingPage() {
       {/* CTA Section */}
       <section className="relative z-10 py-40 px-6">
         <div className="max-w-4xl mx-auto text-center space-y-12">
-          <h2 className="text-6xl md:text-7xl font-black tracking-tighter uppercase leading-[0.9]">
-            Ready to upgrade your <span className="text-accent">trading</span>?
-          </h2>
-          <p className="text-text-dim text-xl font-medium">
-            Join thousands of high-performance traders using MarketLens to stay ahead of the curve.
-          </p>
+          <h2 className="text-6xl md:text-7xl font-black tracking-tighter uppercase leading-[0.9]">Ready to upgrade your <span className="text-accent">trading</span>?</h2>
+          <p className="text-text-dim text-xl font-medium">Join thousands of high-performance traders using MarketLens to stay ahead of the curve.</p>
           <div className="pt-8">
-            <button 
-              onClick={() => navigate('/auth')}
-              className="group relative px-12 py-6 bg-white text-black rounded-2xl text-sm uppercase font-black tracking-widest overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.2)]"
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                Launch Platform <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </span>
+            <button onClick={() => navigate('/auth')} className="group relative px-12 py-6 bg-white text-black rounded-2xl text-sm uppercase font-black tracking-widest overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.2)]">
+              <span className="relative z-10 flex items-center gap-2">Launch Platform <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" /></span>
             </button>
           </div>
           <div className="pt-12 flex items-center justify-center gap-8 opacity-30 grayscale">
@@ -384,22 +402,15 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="relative z-10 py-12 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-2 opacity-50">
-            <img 
-              src="https://chatgpt.com/backend-api/estuary/content?id=file_00000000ae1871f5a8f925de14542cf8&ts=493413&p=fs&cid=1&sig=544363e48ba03522eb389bda4b571cef7a8914e5f4ed2e5fbff1756e14c09479&v=0" 
-              alt="MarketLens Logo" 
-              className="w-5 h-5 object-contain grayscale" 
-              referrerPolicy="no-referrer" 
-            />
+          <div className="flex items-center gap-2 opacity-60">
+            <img src="/logo.png" alt="MarketLens Logo" className="w-6 h-6 object-contain" referrerPolicy="no-referrer" />
             <span className="text-sm font-black tracking-tighter uppercase">MarketLens</span>
           </div>
-          <div className="text-[10px] text-text-dim uppercase font-bold tracking-widest">
-            © 2026 MarketLens Intelligence. All rights reserved.
-          </div>
+            <div className="text-[10px] text-text-dim uppercase font-bold tracking-widest">DEV BY KENTO IV</div>
           <div className="flex gap-6 text-[10px] uppercase font-bold tracking-widest text-text-dim">
-            <a href="#" className="hover:text-accent transition-colors">Privacy</a>
-            <a href="#" className="hover:text-accent transition-colors">Terms</a>
-            <a href="#" className="hover:text-accent transition-colors">Contact</a>
+              <a href="#" className="hover:text-accent transition-colors">Privacy</a>
+              <a href="#" className="hover:text-accent transition-colors">Terms</a>
+              <a href="https://x.com/0xKento_" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Contact</a>
           </div>
         </div>
       </footer>
